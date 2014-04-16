@@ -24,7 +24,6 @@ namespace superProject
 
         protected SpriteFont font;
 
-   //     protected Dictionary<String, Button> buttons; 
         protected Button[] buttons;
         public Dictionary<String, String> data;
         public MouseState previousMouseState;

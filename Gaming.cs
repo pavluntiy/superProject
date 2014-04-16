@@ -117,22 +117,13 @@ namespace superProject
         }
 
         public bool Intersects(ref BoundingSphere sphere, ref Vector3[] triangle, out bool onEdge){
-        
-        //    bool result = false;
-        //    onEdge = true;
+       
 
             Ray ray = new Ray();
             onEdge = true;
             float? length;
             Vector3 A = triangle[0], B = triangle[1], C = triangle[2];
-            // Test the edges of the triangle using a ray
-            // If any hit then check the distance to the hit is less than the length of the side
-            // The distance from a point of a small triangle inside the sphere coule be longer
-            // than the edge of the small triangle, hence the test for points inside above.
             Vector3 side = B - A;
-            // Important:  The direction of the ray MUST
-            // be normalised otherwise the resulting length 
-            // of any intersect is wrong!
             ray = new Ray(A, Vector3.Normalize(side));
             float distSq = 0;
             length = null;
@@ -142,11 +133,10 @@ namespace superProject
                 distSq = (float)length * (float)length;
                 if (length > 0 && distSq < side.LengthSquared())
                 {
-                    // Hit edge
                     return true;
                 }
             }
-            // Stay at A and change the direction to C
+
             side = C - A;
             ray.Direction = Vector3.Normalize(side);
             length = null;
@@ -156,11 +146,10 @@ namespace superProject
                 distSq = (float)length * (float)length;
                 if (length > 0 && distSq < side.LengthSquared())
                 {
-                    // Hit edge
                     return true;
                 }
             }
-            // Change to corner B and edge to C
+
             side = C - B;
             ray.Position = B;
             ray.Direction = Vector3.Normalize(side);
@@ -171,35 +160,18 @@ namespace superProject
                 distSq = (float)length * (float)length;
                 if (length > 0 && distSq < side.LengthSquared())
                 {
-                    // Hit edge
                     return true;
                 }
             }
-
-            // First check if any corner point is inside the sphere
-            // This is necessary because the other tests can easily miss
-            // small triangles that are fully inside the sphere.
             if (sphere.Contains(A) != ContainmentType.Disjoint ||
                 sphere.Contains(B) != ContainmentType.Disjoint ||
                 sphere.Contains(C) != ContainmentType.Disjoint)
             {
-                // A point is inside the sphere
-
                 return true;
             }
  
-            
-
-         // //  // If we get this far we are not touching the edges of the triangle
-
-            // Calculate the InverseNormal of the triangle from the centre of the sphere
-            // Do a ray intersection from the centre of the sphere to the triangle.
-            // If the triangle is too small the ray could miss a small triangle inside
-            // the sphere hence why the points were tested above.
             onEdge = false;
             ray.Position = sphere.Center;
-            // This will always create a vector facing towards the triangle from the 
-            // ray starting point.
 
             ray.Direction = -getNormalToTriangle(ref triangle);
 
@@ -207,11 +179,9 @@ namespace superProject
             Intersects(ref ray, ref triangle, out length);
             if (length != null && length > 0 && length < sphere.Radius)
             {
-                // Hit the surface of the triangle
                 return true;
             }
             
-            // Only if we get this far have we missed the triangle
             return false;
         }
 
@@ -327,7 +297,7 @@ namespace superProject
                             effect.EnableDefaultLighting();
                             effect.CurrentTechnique = effect.Techniques[0];
                             effect.World = currentBonusTransforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(currentBonus.Value.position);
-                            effect.View = viewMatrix;// Matrix.CreateLookAt(cameraPosition, Vector3.Zero, Vector3.Up);
+                            effect.View = viewMatrix;
                             effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, device.Viewport.AspectRatio, 1.0f, 300.0f);
                         }
                         mesh.Draw();
@@ -393,8 +363,6 @@ namespace superProject
 
         private WorldTriangle[] getPositions(string input){
             List<WorldTriangle> list = new List<WorldTriangle>();
-
-          //  char separators[] = {'\n', ' '};
             string[] strings = input.Split(new Char[] { '\n', ' ' });
 
             Vector3 V1 = new Vector3((float)Convert.ToDouble(strings[1]), (float)Convert.ToDouble(strings[2]), (float)Convert.ToDouble(strings[3]));
@@ -511,8 +479,6 @@ namespace superProject
 
         private void DrawBall()
         {
-      //      worldMatrix = Matrix.CreateScale(0.0005f, 0.0005f, 0.0005f) * Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateFromQuaternion(ballRotation) * Matrix.CreateTranslation(ballPosition);
-        //    worldMatrix *= Matrix.CreateScale(0.005f);
 
             Matrix[] ballTransforms = new Matrix[ball.model.Bones.Count];
             ball.model.CopyAbsoluteBoneTransformsTo(ballTransforms);
@@ -524,8 +490,8 @@ namespace superProject
                     effect.Texture = ball.textures[ball.currentMaterial];
                     effect.EnableDefaultLighting();
                     effect.CurrentTechnique = effect.Techniques[0];
-                    effect.World = ballTransforms[mesh.ParentBone.Index] * Matrix.CreateFromQuaternion(ball.rotationQuaternion) * Matrix.CreateTranslation(ball.position);//Matrix.CreateFromAxisAngle(rotAxis, angle); 
-                    effect.View = viewMatrix;// Matrix.CreateLookAt(cameraPosition, Vector3.Zero, Vector3.Up);
+                    effect.World = ballTransforms[mesh.ParentBone.Index] * Matrix.CreateFromQuaternion(ball.rotationQuaternion) * Matrix.CreateTranslation(ball.position);
+                    effect.View = viewMatrix;
                     effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, device.Viewport.AspectRatio, 1.0f, 300.0f);
                 }
                 mesh.Draw();
@@ -565,7 +531,6 @@ namespace superProject
                    }
                    WorldTriangle[] triangles = getPositions(line);
 
-            //       Vector3[] currentTriangle = new Vector3[3];
                    for (var i = 0; i < triangles.Length; ++i )
                    {
                        ;
@@ -577,72 +542,11 @@ namespace superProject
                        triangles[i].textureA = new Vector2(1f, 0 );
                        triangles[i].textureB = new Vector2(0, 0);
                        triangles[i].textureC = new Vector2(0, 1f);
-                       //         currentTriangle[0] = triangle.A;
-                       //       currentTriangle[1] = triangle.B;
-                       //     currentTriangle[2] = triangle.C ;
 
-                       //     triangleList.Add(new Vector3[] {triangle.A, triangle.B, triangle.C});
                        triangleList.AddRange(triangles);
-                       /*                    currentTriangle = new Vector3[3];
-
-                                           verticesList.Add(new VertexPositionNormalTexture(vertexes[4 * i + 2 - 1], normal, new Vector2(5, 0)));
-                                           verticesList.Add(new VertexPositionNormalTexture(vertexes[4 * i + 4 - 1], normal, new Vector2(5, 0)));
-                                           verticesList.Add(new VertexPositionNormalTexture(vertexes[4 * i + 3 - 1], normal, new Vector2(0, 0)));
-
-                       
-                                           currentTriangle[0] = vertexes[4 * i + 2 - 1];
-                                           currentTriangle[1] = vertexes[4 * i + 4 - 1];
-                                           currentTriangle[2] = vertexes[4 * i + 3 - 1];
-                       
-
-                                           triangleList.Add(currentTriangle);
-
-                    */
+                      
                    }
                }
-
-               #region
-               //front wall
-               /*                        verticesList.Add(new VertexPositionNormalTexture(vertexes[5], normalize(vertexes[6], vertexes[7]), new Vector2(0, 0)));
-                                   verticesList.Add(new VertexPositionNormalTexture(vertexes[6],  normalize(vertexes[5], vertexes[7]), new Vector2(0, 0)));
-                                   verticesList.Add(new VertexPositionNormalTexture(vertexes[7], normalize(vertexes[6], vertexes[5]), new Vector2(0, 0)));
-
-                                   verticesList.Add(new VertexPositionNormalTexture(vertexes[6], normalize(vertexes[7], vertexes[8]), new Vector2(0, 0)));
-                                   verticesList.Add(new VertexPositionNormalTexture(vertexes[8], normalize(vertexes[6], vertexes[7]), new Vector2(0, 0)));
-                                   verticesList.Add(new VertexPositionNormalTexture(vertexes[7], normalize(vertexes[6], vertexes[8]), new Vector2(0, 0)));
-
-                                       //back wall
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 1)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2) / imagesInTexture, 0)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-
-                                       //left wall
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z - 1), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 1)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z - 1), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z - 1), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 0)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-
-                                       //right wall
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z - 1), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z - 1), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 1)));
-
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z - 1), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-                                       verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 0)));
-                * 
-                *
-                           }
-                    */
-               #endregion
-
                vertexBuffer = new VertexBuffer(device, VertexPositionNormalTexture.VertexDeclaration, verticesList.Count, BufferUsage.WriteOnly);
 
             vertexBuffer.SetData<VertexPositionNormalTexture>(verticesList.ToArray());
@@ -734,29 +638,13 @@ namespace superProject
                         cos = 0.0f;
                     }
                     var currentForceComponent = -cos * force.Length() * normal;
-                    if (onEdge)
-                    {
-                        int a = 0;
-                    }
 
-      /*              if (usedNormals.ContainsKey(triangleNormal))
-                    {
-                        continue;
-                    }
-       
-*/
-                    if (onEdge)
-                    {
-                        int a = 0;
-                    }
-                    bool tmp = usedNormals.ContainsKey(normal);// && usedNormals[triangleNormal] == 1;
+                    bool tmp = usedNormals.ContainsKey(normal);
                     if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1 && cos <= 0)
                     {
                         forceResult += currentForceComponent;
-      //                  forces.Add(currentForceComponent);
                     }
                
-                  //  impulsResult += Vector3.Reflect(impuls, triangleNormal);
                     
                     if (impuls == Vector3.Zero)
                     {
@@ -765,35 +653,22 @@ namespace superProject
                     cos = Vector3.Dot(Vector3.Normalize(impuls), normal);
                     var currentImpulsComponent = -cos * impuls.Length() * normal; //<--WTF?!
                     //WTF?!
-                  //  impulsResult += currentComponent;
-                    /*if (!usedNormals.Contains(triangleNormal) || cos)
-                    {
-                     */
 
                     remainingImpuls = 0.999f * remainingImpuls;
 
                     if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1 && cos <= 0)
                     {
-                        //               impulsResult += currentImpulsComponent;
                         remainingImpuls += currentImpulsComponent;
+                    }
 
-                    }
-                    else
-                    {
-                        int a = 0;
-                    }
                     
                     if (Math.Abs(remainingImpuls.Y) < 10E-5)
                     {
                         remainingImpuls.Y = 0;
                     }
 
-                    if (forceResult.Y <= 0 || remainingImpuls.Y < 0)
-                    {
-                        int a = 0;
-                    }
-                    
-                    
+
+                               
                     if(!usedNormals.ContainsKey(normal)){
                         usedNormals.Add(normal, 1);
                     }
@@ -817,30 +692,17 @@ namespace superProject
             {
                 cos = 0.0f;
             }
-            //       forceResult += -gravity.Length() * ball.mass * triangleNormal * cos;
-            var currentForceComponent = -cos * force.Length() * normal;
-            if (onEdge)
-            {
-                int a = 0;
-            }
 
-            /*              if (usedNormals.ContainsKey(triangleNormal))
-                          {
-                              continue;
-                          }
-      */
-            bool tmp = usedNormals.ContainsKey(normal);// && usedNormals[triangleNormal] == 1;
+            var currentForceComponent = -cos * force.Length() * normal;
+
+
+            bool tmp = usedNormals.ContainsKey(normal);
             if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1 && cos <= 0)
             {
                 forceResult += currentForceComponent;
-                //                  forces.Add(currentForceComponent);
-            }
-            else
-            {
-                int a = 0;
             }
 
-            //  impulsResult += Vector3.Reflect(impuls, triangleNormal);
+
 
             if (impuls == Vector3.Zero)
             {
@@ -849,34 +711,18 @@ namespace superProject
             cos = Vector3.Dot(Vector3.Normalize(impuls), normal);
             var currentImpulsComponent = -cos * impuls.Length() * normal; //<--WTF?!
             //WTF?!
-            //  impulsResult += currentComponent;
-            /*if (!usedNormals.Contains(triangleNormal) || cos)
-            {
-             */
 
             remainingImpuls = 0.999f * remainingImpuls;
 
              if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1 && cos <= 0)
             {
-                //               impulsResult += currentImpulsComponent;
                 remainingImpuls += currentImpulsComponent;
-
-            }
-            else
-            {
-                int a = 0;
             }
 
             if (Math.Abs(remainingImpuls.Y) < 10E-5)
             {
                 remainingImpuls.Y = 0;
             }
-
-            if (forceResult.Y <= 0 || remainingImpuls.Y < 0)
-            {
-                int a = 0;
-            }
-
 
             if (!usedNormals.ContainsKey(normal))
             {
@@ -924,30 +770,13 @@ namespace superProject
             {
                 cos = 0.0f;
             }
-            //       forceResult += -gravity.Length() * ball.mass * triangleNormal * cos;
             var currentForceComponent = -cos * force.Length() * normal;
-            if (onEdge)
-            {
-                int a = 0;
-            }
-
-            /*              if (usedNormals.ContainsKey(triangleNormal))
-                          {
-                              continue;
-                          }
-      */
-            bool tmp = usedNormals.ContainsKey(normal);// && usedNormals[triangleNormal] == 1;
+            bool tmp = usedNormals.ContainsKey(normal);
             if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1)
             {
                 forceResult += currentForceComponent;
-                //                  forces.Add(currentForceComponent);
-            }
-            else
-            {
-                int a = 0;
             }
 
-            //  impulsResult += Vector3.Reflect(impuls, triangleNormal);
 
             if (impuls == Vector3.Zero)
             {
@@ -960,12 +789,6 @@ namespace superProject
             }
             var currentImpulsComponent = -cos * impuls.Length() * normal; 
             
-            //  impulsResult += currentComponent;
-            /*if (!usedNormals.Contains(triangleNormal) || cos)
-            {
-             */
-
-        //    remainingImpuls = 0.999f * remainingImpuls;
 
             if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1)
             {
@@ -973,21 +796,12 @@ namespace superProject
                 remainingImpuls += currentImpulsComponent;
 
             }
-            else
-            {
-                int a = 0;
-            }
+
 
             if (Math.Abs(remainingImpuls.Y) < 10E-5)
             {
                 remainingImpuls.Y = 0;
             }
-
-            if (forceResult.Y <= 0 || remainingImpuls.Y < 0)
-            {
-                int a = 0;
-            }
-
 
             if (!usedNormals.ContainsKey(normal))
             {
@@ -1025,7 +839,6 @@ namespace superProject
         ref Dictionary<Vector3, int> usedNormals,
         ref bool onEdge, ref Vector3 normal)
         {
-        //    normal = -normal;
 
             if (ball.currentMaterial == Ball.Material.Plastic)
             {
@@ -1036,23 +849,15 @@ namespace superProject
             {
                 cos = 0.0f;
             }
-            //       forceResult += -gravity.Length() * ball.mass * triangleNormal * cos;
             var currentForceComponent = -cos * force.Length() * normal;
 
 
             normal = -normal;
-            bool tmp = usedNormals.ContainsKey(normal);// && usedNormals[triangleNormal] == 1;
+            bool tmp = usedNormals.ContainsKey(normal);
             if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1)
             {
                 forceResult += 0.8f * currentForceComponent;
-                //                  forces.Add(currentForceComponent);
             }
-            else
-            {
-                int a = 0;
-            }
-
-            //  impulsResult += Vector3.Reflect(impuls, triangleNormal);
 
             if (impuls == Vector3.Zero)
             {
@@ -1064,35 +869,19 @@ namespace superProject
                 cos = 0.0f;
             }
             var currentImpulsComponent = -cos * impuls.Length() * normal; //<--WTF?!
-            //WTF?!
-            //  impulsResult += currentComponent;
-            /*if (!usedNormals.Contains(triangleNormal) || cos)
-            {
-             */
 
               remainingImpuls = 0.9f * remainingImpuls;
 
             if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1)
             {
-           //     impulsResult += currentImpulsComponent;
                 remainingImpuls += currentImpulsComponent;
 
-            }
-            else
-            {
-                int a = 0;
             }
 
             if (Math.Abs(remainingImpuls.Y) < 10E-5)
             {
                 remainingImpuls.Y = 0;
             }
-
-            if (forceResult.Y <= 0 || remainingImpuls.Y < 0)
-            {
-                int a = 0;
-            }
-
 
             if (!usedNormals.ContainsKey(normal))
             {
@@ -1110,7 +899,6 @@ namespace superProject
 
             Dictionary<Vector3, int> usedNormals = new Dictionary<Vector3, int>();
             HashSet<Vector3> forces = new HashSet<Vector3>();
-            bool interactionExpired = false;
             Vector3 remainingForce = Vector3.Zero;
             Vector3  impulsResult = new Vector3(0, 0, 0), forceResult = new Vector3(0, 0, 0), remainingImpuls = impuls;
             foreach(var triangle in triangles){
@@ -1152,20 +940,7 @@ namespace superProject
                 }
                    
             }
-
-
-
-            if (impuls.Z != 0)
-            {
-                int b = 0;
-            }
-            if (interactionExpired)
-            {
-                
-            }
-
            
-
             impuls = impulsResult + remainingImpuls;
             force += forceResult;
         }
@@ -1186,8 +961,6 @@ namespace superProject
 
             KeyboardState keyState = Keyboard.GetState();
 
-      //      Vector3 rotVect = new Vector3(1, 2, 3);
-    //        ball.rotation += 0.005f * rotVect;
             Vector3 force = new Vector3(0, 0, 0);
 
             if(keyState.IsKeyDown(Keys.Escape))
@@ -1244,9 +1017,6 @@ namespace superProject
                 ExitLevel();
             }
 
-        //    rotAxis = ball.position;//new Vector3(impuls.Z, 0.0f, impuls.X);
-         //   rotAxis.Normalize();
- //           angle = impuls.Length() / 1000;
             applyAirResistance(ref force);
             if (!ball.isDead())
             {
@@ -1254,19 +1024,11 @@ namespace superProject
                 ball.applyForce(force, gameTime);
                 ball.update(gameTime);
             }
-          //  base.Update(gameTime);
+            base.Update(gameTime);
         }
 
         protected void DrawStaticWorld()
         {
-        /*    foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                device.SetVertexBuffer(vertexBuffer);
-                effect.Texture = textures[Material.Wood];
-                device.DrawPrimitives(PrimitiveType.TriangleList, 0, vertexBuffer.VertexCount / 3);
-            }
-            */
            foreach (var triangle in staticTriangles)
             {
 
@@ -1291,33 +1053,16 @@ namespace superProject
                     device.SetVertexBuffer(vertexBuffer);
                     effect.Texture = textures[triangle.material];
                     device.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, vertexes, 0, 1);
-              //      device.DrawPrimitives(PrimitiveType.TriangleList, 0, vertexBuffer.VertexCount / 3);
                 }
             }
-
-
-
         }
 
         protected void DrawSky()
         {
-          /* skyBoxEffect.Parameters["ViewMatrix"].SetValue(viewMatrix);
-            skyBoxEffect.Parameters["ProjectionMatrix"].SetValue(projectionMatrix);
-            // Draw the sphere model that the effect projects onto
-            foreach (ModelMesh mesh in skyBoxModel.Meshes)
-            {
-                mesh.Draw();
-            }
-       */
-       
-
             foreach (EffectPass pass in skyBoxEffect.CurrentTechnique.Passes)
             {
-                // Draw all of the components of the mesh, but we know the cube really
-                // only has one mesh
                 foreach (ModelMesh mesh in skyBoxModel.Meshes)
                 {
-                    // Assign the appropriate values to each of the parameters
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
                         part.Effect = skyBoxEffect;
@@ -1328,26 +1073,15 @@ namespace superProject
                         part.Effect.Parameters["SkyBoxTexture"].SetValue(skyBoxTexture);
                         part.Effect.Parameters["CameraPosition"].SetValue(cameraPosition);
                     }
-
-                    // Draw the mesh with the skybox effect
                     mesh.Draw();
                 }
             }
         }
-        protected void DrawMenu(GameTime gameTime){
-        }
+ 
 
         protected void DrawBallData()
         {
    
-           /* spriteBatch.Begin();
-               spriteBatch.DrawString(font, "Lives " + this.ball.lives.ToString(), new Vector2(20, 20), Color.Beige);
-                spriteBatch.DrawString(font, "Score " + this.ball.score.ToString(), new Vector2(20, 60), Color.Beige);
-            spriteBatch.End();
-            device.BlendState = BlendState.Opaque;
-            device.DepthStencilState = DepthStencilState.Default;
-            */
-
             this.writeMessage("Lives " + this.ball.lives.ToString(), new Vector2(20, 20), Color.Beige);
             this.writeMessage("Score " + this.ball.score.ToString(), new Vector2(20, 60), Color.Beige);
             this.writeMessage("Keys to collect " + this.ball.keysLeft.ToString(), new Vector2(20, 100), Color.Beige);
@@ -1363,21 +1097,16 @@ namespace superProject
 
             RasterizerState rs = new RasterizerState();
             rs.CullMode = CullMode.None;
-            //   rs.FillMode = FillMode.WireFrame;
             rs.FillMode = FillMode.Solid;
             device.RasterizerState = rs;
 
             effect.TextureEnabled = true;
-    //        Vector3 rotAxis = new Vector3(3 * angle, angle, 2 * angle);
-  //          rotAxis.Normalize();
-   //        Matrix worldMatrix = Matrix.CreateTranslation(-2.0f / 3.0f, -1.0f / 3.0f, 0) * Matrix.CreateFromAxisAngle(rotAxis, angle);
+
             effect.World = Matrix.Identity;
             
-   //         effect.World = worldMatrix;
             effect.View = viewMatrix;
             effect.Projection = projectionMatrix;
 
-     //       effect.Texture = texture;
             effect.LightingEnabled = true;
             effect.EnableDefaultLighting();
 
@@ -1394,7 +1123,7 @@ namespace superProject
             drawBonuses();
             DrawBallData();
             
-        //    base.Draw(gameTime);
+            base.Draw(gameTime);
         }
     }
     }

@@ -20,26 +20,17 @@ namespace superProject
     public class Game1 : Microsoft.Xna.Framework.Game
     {
 
-
-  //      bool isMenu;
         public GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public GraphicsDevice device;
 
         public BasicEffect effect;
-/*        Matrix viewMatrix;
-        Matrix projectionMatrix;
-        Matrix worldMatrix;
-        Ball ball;
-        Effect skyBoxEffect;
-*/
         State state, previousState;
    
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             device = graphics.GraphicsDevice;
-     //       this.graphics.IsFullScreen = true;
             
             Content.RootDirectory = "Content";
         }
@@ -62,12 +53,7 @@ namespace superProject
 
             Content.RootDirectory = "Content";
 
-
-        //    state = new Cleared(this, ref graphics, ref spriteBatch, ref device);
-          //  state = new Menu(this, ref graphics, ref spriteBatch, ref device);
-         //   createGaming();
-            createGaming("Level0");
-         //   setMenu();
+            setMenu();
             base.LoadContent();
         }
 

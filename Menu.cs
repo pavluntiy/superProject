@@ -18,8 +18,6 @@ namespace superProject
     {
 
         protected  void ButtonsInit(){
-              //    buttons = new Dictionary<string, Button>();
-          //  buttons["exit"] = new Button(this, "Exit", new Vector2(512, 256), 80, 20, Color.Yellow, Color.Gray);
 
             List<Button> bl = new List<Button>();
             bl.Add(new Button(this, "Exit", new Vector2(512, 256), 100, 20, Color.Yellow, Color.Gray));
@@ -47,23 +45,10 @@ namespace superProject
             Initialize();
             LoadContent();
         }
-
-  /*      public override void writeMessage(String message, Vector2 where, Color color)
-        {
-            spriteBatch.Begin();
-                spriteBatch.DrawString(font, message, where, color);
-            spriteBatch.End();
-            device.BlendState = BlendState.Opaque;
-            device.DepthStencilState = DepthStencilState.Default;
-        }
-*/
        
         protected override void Initialize()
         {
-       //     parentGame.Content.RootDirectory = "Content";
 
-           
-      //      parentGame.graphics.IsFullScreen = true;
             previousMouseState = Mouse.GetState();
             parentGame.IsMouseVisible = true;
             parentGame.graphics.ApplyChanges();
@@ -146,9 +131,6 @@ namespace superProject
                 button.Draw();
             }
 
-
-            
-        //    
             base.DrawAll(gameTime);
         }
     }

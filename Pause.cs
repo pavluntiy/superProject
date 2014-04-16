@@ -23,10 +23,10 @@ namespace superProject
 
             List<Button> bl = new List<Button>();
             
-            bl.Add(new Button(this, "Full Screen", new Vector2(512, 200), 80, 20, Color.Yellow, Color.Gray));
-            bl.Add(new Button(this, "Restart", new Vector2(512, 256), 80, 20, Color.Yellow, Color.Gray));
-            bl.Add(new Button(this, "Exit", new Vector2(512, 296), 80, 20, Color.Yellow, Color.Gray));
-            bl.Add(new Button(this, "Back", new Vector2(512, 340), 80, 20, Color.Yellow, Color.Gray));
+            bl.Add(new Button(this, "Full Screen", new Vector2(512, 220), 150, 20, Color.Yellow, Color.Gray));
+            bl.Add(new Button(this, "Restart", new Vector2(512, 260), 150, 20, Color.Yellow, Color.Gray));
+            bl.Add(new Button(this, "Exit", new Vector2(512, 300), 150, 20, Color.Yellow, Color.Gray));
+            bl.Add(new Button(this, "Back", new Vector2(512, 340), 150, 20, Color.Yellow, Color.Gray));
 
 
             buttons = bl.ToArray();

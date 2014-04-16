@@ -22,9 +22,11 @@ namespace superProject
 
  
             List<Button> bl = new List<Button>();
-            bl.Add(new Button(this, "Back", new Vector2(512, 340), 80, 20, Color.Yellow, Color.Gray));
-            bl.Add(new Button(this, "Level 0 (Tutorial)", new Vector2(512, 256), 80, 20, Color.Yellow, Color.Gray));
-            bl.Add(new Button(this, "Level 1", new Vector2(512, 296), 80, 20, Color.Yellow, Color.Gray));
+            
+            bl.Add(new Button(this, "Level 0 (Tutorial)", new Vector2(512, 250), 150, 20, Color.Yellow, Color.Gray));
+            bl.Add(new Button(this, "Level 1", new Vector2(512, 300), 150, 20, Color.Yellow, Color.Gray));
+            bl.Add(new Button(this, "Level 2", new Vector2(512, 340), 150, 20, Color.Yellow, Color.Gray));
+            bl.Add(new Button(this, "Back", new Vector2(512, 380), 150, 20, Color.Yellow, Color.Gray));
 
 
             buttons = bl.ToArray();
@@ -53,9 +55,6 @@ namespace superProject
         protected override void Initialize()
         {
             previousMouseState = Mouse.GetState();
-            parentGame.IsMouseVisible = true;
-            parentGame.graphics.ApplyChanges();
-
             base.Initialize();
         }
 
@@ -84,20 +83,14 @@ namespace superProject
 
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
-                if (currentButton == 0)
-                {
-                    parentGame.Exit();
-                }
 
-                else
-                {
                     switch (buttons[currentButton].text)
                     {
                         case "Level 0 (Tutorial)": parentGame.createGaming("Level0"); break;
                         case "Level 1": parentGame.createGaming("Level1"); break;
+                        case "Level 2": parentGame.createGaming("Level2"); break;
                         case "Back": parentGame.exitToMenu(); break;
                     }
-                }
 
             }
 
