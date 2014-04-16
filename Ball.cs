@@ -11,8 +11,6 @@ using Microsoft.Xna.Framework.Media;
 using System.IO;
 
 
-//using DigitalRune.Game;
-
 namespace superProject
 {
 
@@ -20,7 +18,6 @@ namespace superProject
     {
         protected Gaming parentGaming;
         public Model model;
-
         public Quaternion rotationQuaternion;
         public Vector3 position;
         public Vector3 velocity;
@@ -35,15 +32,13 @@ namespace superProject
         public enum Material {Marble, Plastic, Stone, Idle};
         public Dictionary<Material, Texture2D> textures;
         public Material currentMaterial;
+        float maxVelocity = 60.0f;
 
 
+       public int lives;
+       public int score;
 
-       public int lives = 10;
-       public int score = 10000;
-
-        public int keysLeft = 0;
-
-
+       public int keysLeft = 0;
         public bool justDied;
         float minHeight;
 
@@ -53,12 +48,10 @@ namespace superProject
             this.parentGaming = parentGaming;
             this.model = model;
 
-            this.Home = this.position = new Vector3(2.5f, 11f, 5);
             this.boundingSphere = new BoundingSphere(this.position, this.radius);
             
             this.rotationQuaternion = Quaternion.Identity;
             this.velocity = new Vector3(0, 0, 0);
-    //        this.force = new Vector3(0, 0, 0);
             this.textures = new Dictionary<Material,Texture2D>();
 
             setMaterial(Material.Marble);
@@ -152,13 +145,9 @@ namespace superProject
                 this.velocity.Y = previousVelocity.Y;
             }
 
-            if (this.velocity.Length() > 60.0f )
+            if (this.velocity.Length() > maxVelocity )
             {
                 this.velocity = previousVelocity;
-            }
-            if (this.currentMaterial == Ball.Material.Marble)
-            {
-        //        velocity.Y = Math.Min(0.5f, velocity.Y);
             }
         }
 
@@ -187,11 +176,6 @@ namespace superProject
                 axis.Normalize();
             }
             rotationQuaternion = Quaternion.CreateFromAxisAngle(axis, angle);
- 
-    //        Vector3 axis = Vector3.Cross(this.velocity, Vector3.Up);
-  //          float angle = this.velocity.Length();//factor by delta time if neccesary
-
-//            Quaternion rotationThisFrame = Quaternion.CreateFromAxisAngle(axis, angle * (1 / this.radius));
 
             this.score -= 1;
             if (this.position.Y < minHeight)
@@ -218,12 +202,7 @@ namespace superProject
 
             return false;
         }
-     /*   public void applyGravity(Vector3 acceleration, GameTime time)
-        {
 
-            this.velocity += acceleration* (float)time.ElapsedGameTime.TotalSeconds;
-        }
-*/
         public void stop()
         {
             this.velocity = new Vector3(0, 0, 0);

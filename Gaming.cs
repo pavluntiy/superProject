@@ -242,10 +242,6 @@ namespace superProject
         protected override void LoadContent()
         {
 
-        //    spriteBatch = new SpriteBatch(GraphicsDevice);
-       //     device = graphics.GraphicsDevice;
-     //       device = GraphicsDevice;
-
             effect = new BasicEffect(device);
            textures = new Dictionary<Material,Texture2D>();
             textures[Material.Wood] = parentGame.Content.Load<Texture2D>("wood");
@@ -255,7 +251,6 @@ namespace superProject
 
 
             skyBoxEffect = parentGame.Content.Load<Effect>("skyBoxEffect");
-   //         device.Textures[0] = textures[Material.Wood] as Texture;
             ball = new Ball(loadModel("ball"), this);
             textures[Material.Marble] = ball.textures[Ball.Material.Marble] = parentGame.Content.Load<Texture2D>("marble");
             textures[Material.Plastic] = ball.textures[Ball.Material.Plastic] = parentGame.Content.Load<Texture2D>("plastic");
@@ -273,32 +268,18 @@ namespace superProject
 
 
             skyBoxModel = loadModel("SkySphereModel");
-         //   skyBoxEffect.Parameters = new EffectParameterCollection();
-      //      skyBoxEffect.Parameters["SkyboxTexture"].SetValue(skyBoxTexture);
 
-//            skyBoxTexture = parentGame.Content.Load<TextureCube>(this.name + ' ' + "sky");
-
-
-            //, out skyboxTextures);
             setBonuses();
             SetUpCamera();
             SetModel();
             SetUpVertices();
             DrawStaticWorld();
 
-   //         var a = GraphicsDevice;
         }
 
-
-
-
-       // List<Bonus> bonuses;
         Dictionary<int, Bonus> bonuses;
         protected void setBonuses()
-        {
-           
-
-           
+        {   
              StreamReader sr = new StreamReader(this.name + " " + "bonusesData.txt");
               bonuses = new Dictionary<int, Bonus>();
 
@@ -352,16 +333,6 @@ namespace superProject
 
                 }
             }
-/*
-        public override void writeMessage(String message, Vector2 where, Color color)
-        {
-            spriteBatch.Begin();
-                spriteBatch.DrawString(font, message,  where, color);
-            spriteBatch.End();
-            device.BlendState = BlendState.Opaque;
-            device.DepthStencilState = DepthStencilState.Default;
-        }
- */ 
         private void checkBonusCollisions()
         {
             List<int> toErase = new List<int>();
@@ -474,127 +445,35 @@ namespace superProject
 
             }
             #region
-            /*     if (strings[0] == "w")
-         a{
-             Vector3 V1 = new Vector3((float)Convert.ToDouble(strings[1]), (float)Convert.ToDouble(strings[2]), (float)Convert.ToDouble(strings[3]));
-             Vector3 V2 = new Vector3((float)Convert.ToDouble(strings[4]), (float)Convert.ToDouble(strings[5]), (float)Convert.ToDouble(strings[6]));
-             Vector3 V3 = new Vector3((float)Convert.ToDouble(strings[7]), (float)Convert.ToDouble(strings[8]), (float)Convert.ToDouble(strings[9]));
-             Vector3 V4 = new Vector3((float)Convert.ToDouble(strings[10]), (float)Convert.ToDouble(strings[11]), (float)Convert.ToDouble(strings[12]));
 
 
-             
-             
-             
-             list.Add(V2);
-             list.Add(V1);
-             list.Add(V4);
-             list.Add(V1 + V4 - V2);
+         if (strings[0] == "pyramid")
+         {
+                    
+                list.Add(new WorldTriangle(V1, V2, V3, currentMaterial));
 
-            
-             
-             
-             list.Add(V2);
-             list.Add(V1);
-             list.Add(V3);
-             list.Add(V3 + V1 - V2);
+                list.Add(new WorldTriangle(V2, V4, V3, currentMaterial));
 
-             
-             
-             
-             list.Add(V3);
-             list.Add(V3 + V1 - V2);
-             list.Add(V4);
-             list.Add(V1 + V4 - V2);
-                      
-             list.Add(V3);
-             list.Add(V2);
-             list.Add(V4);
-             list.Add(V2);
+                list.Add(new WorldTriangle(V2, V1, V4, currentMaterial));
 
-             
-             
-             
-             list.Add(V3 + V1 - V2);
-             list.Add(V1);
-             list.Add(V1 + V4 - V2);
-             list.Add(V1);
-
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
-
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
-
+                list.Add(new WorldTriangle(V1, V3, V4, currentMaterial));
 
          }
 
-         if (strings[0] == "p")
+         if (strings[0] == "plain")
          {
-             Vector3 V1 = new Vector3((float)Convert.ToDouble(strings[1]), (float)Convert.ToDouble(strings[2]), (float)Convert.ToDouble(strings[3]));
-             Vector3 V2 = new Vector3((float)Convert.ToDouble(strings[4]), (float)Convert.ToDouble(strings[5]), (float)Convert.ToDouble(strings[6]));
-             Vector3 V3 = new Vector3((float)Convert.ToDouble(strings[7]), (float)Convert.ToDouble(strings[8]), (float)Convert.ToDouble(strings[9]));
-             Vector3 V4 = new Vector3((float)Convert.ToDouble(strings[10]), (float)Convert.ToDouble(strings[11]), (float)Convert.ToDouble(strings[12]));
 
+             list.Add(new WorldTriangle(V1, V2, V3, currentMaterial));
 
-             
-             list.Add(V1);
-             list.Add(V4);
-                
-             list.Add(V1);
-             list.Add(V2);
-             
-             
-             
+             list.Add(new WorldTriangle(V1, V4, V3, currentMaterial));
 
+             list.Add(new WorldTriangle(V3, V2, V1, currentMaterial));
 
-             list.Add(V3);
-             list.Add(V2);
-             list.Add(V4);
-             list.Add(V3);
-             
-             
-             
-            
-             
-
-
-
-            
-             list.Add(V1);
-             list.Add(V3);
-             list.Add(V4);
-             list.Add(V3);
-            
-             
-             
-             
-
-
-
-             list.Add(V1);
-             list.Add(V3);
-             list.Add(V1);
-             list.Add(V2);
-             
-             
-
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
-
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
-             list.Add(new Vector3(0f, 0f, 0f));
+             list.Add(new WorldTriangle(V3, V4, V1, currentMaterial));
 
          }
         
-            */
+         
 #endregion
          return list.ToArray();
         }
@@ -665,10 +544,7 @@ namespace superProject
         }
         private void SetUpVertices()
         {
-           
-          
-            
-           
+ 
                StreamReader sr = new StreamReader(name + ' ' + "levelData.txt");
                List<VertexPositionNormalTexture> verticesList = new List<VertexPositionNormalTexture>();
                 List<WorldTriangle> triangleList = new List<WorldTriangle>();
@@ -807,7 +683,6 @@ namespace superProject
             setUpVectors();
             currentCameraDelta = new Vector3(-10.0f, 10.0f, 0.0f);
             cameraPosition = ball.position + currentCameraDelta;
-//            viewMatrix = Matrix.CreateLookAt(new Vector3(30, 20, -5), new Vector3(8, 0, -7), new Vector3(0, 1, 0));
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, device.Viewport.AspectRatio, 1.0f, 300.0f);
         }
 
@@ -815,30 +690,16 @@ namespace superProject
         private void setUpVectors(){
             this.up = new Vector3(0, 1, 0);
             this.forward = ball.position - this.cameraPosition;
-           // this.forward = -this.currentCameraDelta;
             forward.Y  = 0; 
             forward.Normalize();
-
             this.right = Vector3.Cross(this.forward, this.up);
-            //Mystery happens here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //If forward == (-1, 0, 0)
-    /*        if (currentCameraDelta == new Vector3(10.0f, 10.0f, 0.0f))
-            {
-                this.right = new Vector3(0, 0, 1);
-            }
-     */ 
             this.right.Normalize();
-       //     this.right.Z = Math.Abs(this.right.Z);
         }
+
         private void UpdateCamera()
         {
-      //      cameraPosition = Vector3.Transform(cameraPosition, Matrix.CreateFromQuaternion(ballRotation));
             cameraPosition = ball.position + currentCameraDelta;
-
-
             setUpVectors();
-         //   Vector3 upVectorOfBall = Vector3.Transform(new Vector3(0, 1, 0), Matrix.CreateFromQuaternion(ballRotation));
-      //      viewMatrix = Matrix.CreateLookAt(new Vector3(30, 20, -5), new Vector3(8, 0, -7), new Vector3(0, 1, 0));
             viewMatrix = Matrix.CreateLookAt(cameraPosition, ball.position, up);
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, device.Viewport.AspectRatio, 1.0f, 300.0f);
         }
@@ -869,7 +730,6 @@ namespace superProject
                     {
                         cos = 0.0f;
                     }
-             //       forceResult += -gravity.Length() * ball.mass * triangleNormal * cos;
                     var currentForceComponent = -cos * force.Length() * normal;
                     if (onEdge)
                     {
