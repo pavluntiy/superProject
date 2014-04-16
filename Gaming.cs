@@ -119,42 +119,12 @@ namespace superProject
         public bool Intersects(ref BoundingSphere sphere, ref Vector3[] triangle, out bool onEdge){
         
         //    bool result = false;
-            onEdge = false;
-            Vector3 A = triangle[0], B = triangle[1], C = triangle[2];
-            // First check if any corner point is inside the sphere
-            // This is necessary because the other tests can easily miss
-            // small triangles that are fully inside the sphere.
-            if (sphere.Contains(A) != ContainmentType.Disjoint ||
-                sphere.Contains(B) != ContainmentType.Disjoint ||
-                sphere.Contains(C) != ContainmentType.Disjoint)
-            {
-                // A point is inside the sphere
-                
-                return true;
-            }
+        //    onEdge = true;
 
-            // If we get this far we are not touching the edges of the triangle
-
-            // Calculate the InverseNormal of the triangle from the centre of the sphere
-            // Do a ray intersection from the centre of the sphere to the triangle.
-            // If the triangle is too small the ray could miss a small triangle inside
-            // the sphere hence why the points were tested above.
             Ray ray = new Ray();
-            onEdge = false;
+            onEdge = true;
             float? length;
-            ray.Position = sphere.Center;
-            // This will always create a vector facing towards the triangle from the 
-            // ray starting point.
-
-            ray.Direction = -getNormalToTriangle(ref triangle);
-
-
-            Intersects(ref ray, ref triangle, out length);
-            if (length != null && length > 0 && length < sphere.Radius)
-            {
-                // Hit the surface of the triangle
-                return true;
-            }
+            Vector3 A = triangle[0], B = triangle[1], C = triangle[2];
             // Test the edges of the triangle using a ray
             // If any hit then check the distance to the hit is less than the length of the side
             // The distance from a point of a small triangle inside the sphere coule be longer
@@ -163,7 +133,6 @@ namespace superProject
             // Important:  The direction of the ray MUST
             // be normalised otherwise the resulting length 
             // of any intersect is wrong!
-            onEdge = true;
             ray = new Ray(A, Vector3.Normalize(side));
             float distSq = 0;
             length = null;
@@ -206,9 +175,43 @@ namespace superProject
                     return true;
                 }
             }
+
+            // First check if any corner point is inside the sphere
+            // This is necessary because the other tests can easily miss
+            // small triangles that are fully inside the sphere.
+            if (sphere.Contains(A) != ContainmentType.Disjoint ||
+                sphere.Contains(B) != ContainmentType.Disjoint ||
+                sphere.Contains(C) != ContainmentType.Disjoint)
+            {
+                // A point is inside the sphere
+
+                return true;
+            }
  
-            // Only if we get this far have we missed the triangle
+            
+
+         // //  // If we get this far we are not touching the edges of the triangle
+
+            // Calculate the InverseNormal of the triangle from the centre of the sphere
+            // Do a ray intersection from the centre of the sphere to the triangle.
+            // If the triangle is too small the ray could miss a small triangle inside
+            // the sphere hence why the points were tested above.
             onEdge = false;
+            ray.Position = sphere.Center;
+            // This will always create a vector facing towards the triangle from the 
+            // ray starting point.
+
+            ray.Direction = -getNormalToTriangle(ref triangle);
+
+
+            Intersects(ref ray, ref triangle, out length);
+            if (length != null && length > 0 && length < sphere.Radius)
+            {
+                // Hit the surface of the triangle
+                return true;
+            }
+            
+            // Only if we get this far have we missed the triangle
             return false;
         }
 
@@ -740,18 +743,19 @@ namespace superProject
                     {
                         continue;
                     }
+       
 */
+                    if (onEdge)
+                    {
+                        int a = 0;
+                    }
                     bool tmp = usedNormals.ContainsKey(normal);// && usedNormals[triangleNormal] == 1;
-                    if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1)
+                    if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1 && cos <= 0)
                     {
                         forceResult += currentForceComponent;
       //                  forces.Add(currentForceComponent);
                     }
-                    else
-                    {
-                        int a = 0;
-                    }
-          
+               
                   //  impulsResult += Vector3.Reflect(impuls, triangleNormal);
                     
                     if (impuls == Vector3.Zero)
@@ -768,7 +772,7 @@ namespace superProject
 
                     remainingImpuls = 0.999f * remainingImpuls;
 
-                    if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1)
+                    if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1 && cos <= 0)
                     {
                         //               impulsResult += currentImpulsComponent;
                         remainingImpuls += currentImpulsComponent;
@@ -826,7 +830,7 @@ namespace superProject
                           }
       */
             bool tmp = usedNormals.ContainsKey(normal);// && usedNormals[triangleNormal] == 1;
-            if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1)
+            if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1 && cos <= 0)
             {
                 forceResult += currentForceComponent;
                 //                  forces.Add(currentForceComponent);
@@ -852,7 +856,7 @@ namespace superProject
 
             remainingImpuls = 0.999f * remainingImpuls;
 
-            if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1)
+             if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1 && cos <= 0)
             {
                 //               impulsResult += currentImpulsComponent;
                 remainingImpuls += currentImpulsComponent;
@@ -1148,6 +1152,9 @@ namespace superProject
                 }
                    
             }
+
+
+
             if (impuls.Z != 0)
             {
                 int b = 0;
