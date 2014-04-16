@@ -19,7 +19,6 @@ namespace superProject
         BasicEffect effect;
         Matrix viewMatrix;
         Matrix projectionMatrix;
-        Matrix worldMatrix;
         Ball ball;
         Effect skyBoxEffect;
 
@@ -52,7 +51,6 @@ namespace superProject
         TextureCube skyBoxTexture;
 
 
-        Game1 parentGame;
 
         protected void setup(String name)
         {
@@ -354,7 +352,7 @@ namespace superProject
 
                 }
             }
-
+/*
         public override void writeMessage(String message, Vector2 where, Color color)
         {
             spriteBatch.Begin();
@@ -363,6 +361,7 @@ namespace superProject
             device.BlendState = BlendState.Opaque;
             device.DepthStencilState = DepthStencilState.Default;
         }
+ */ 
         private void checkBonusCollisions()
         {
             List<int> toErase = new List<int>();
@@ -458,17 +457,17 @@ namespace superProject
             if (strings[0] == "wedge")
             {
 
-                list.Add(new WorldTriangle(V1, V1 + V4 - V2, V3 + V1 - V2, currentMaterial));
+                list.Add(new WorldTriangle(V1, V3 + V1 - V2, V1 + V4 - V2, currentMaterial));
 
                 list.Add(new WorldTriangle(V2, V4, V3, currentMaterial));
 
                 list.Add(new WorldTriangle(V4, V2, V1, currentMaterial));
                 list.Add(new WorldTriangle(V1, V1 + V4 - V2, V4, currentMaterial));
 
-                list.Add(new WorldTriangle(V3, V1, V3 + V1 - V2, currentMaterial));
-                list.Add(new WorldTriangle(V1, V3, V2, currentMaterial));
+                list.Add(new WorldTriangle(V3, V3 + V1 - V2, V1, currentMaterial));
+                list.Add(new WorldTriangle(V1, V2, V3, currentMaterial));
 
-                list.Add(new WorldTriangle(V3 + V1 - V2, V1 + V4 -V2, V4, currentMaterial));
+                list.Add(new WorldTriangle(V4, V1 + V4 - V2, V3 + V1 - V2, currentMaterial));
                 list.Add(new WorldTriangle(V3 + V1 - V2, V3, V4, currentMaterial));
 
 
@@ -654,6 +653,16 @@ namespace superProject
         }
 
         WorldTriangle[] staticTriangles;
+
+        protected void setBall(String str)
+        {
+            string[] strings = str.Split(new Char[] { '\n', ' ' });
+
+            ball.setMaterial(convertToBallMaterials(getMaterial(strings[1])));
+            Vector3 position = new Vector3((float)Convert.ToDouble(strings[3]), (float)Convert.ToDouble(strings[4]), (float)Convert.ToDouble(strings[5]));
+            ball.setData(lives: Convert.ToInt32(strings[7]), score: Convert.ToInt32(strings[9]), minHeight: (float)Convert.ToDouble(strings[11])); 
+            ball.setPosition(position);
+        }
         private void SetUpVertices()
         {
            
@@ -663,9 +672,13 @@ namespace superProject
                StreamReader sr = new StreamReader(name + ' ' + "levelData.txt");
                List<VertexPositionNormalTexture> verticesList = new List<VertexPositionNormalTexture>();
                 List<WorldTriangle> triangleList = new List<WorldTriangle>();
+                String line = sr.ReadLine();
+                line = sr.ReadLine();
+                setBall(line);
+                line = sr.ReadLine();
                while (!sr.EndOfStream)
                {
-                   String line = sr.ReadLine();
+                   line = sr.ReadLine();
 
                    if (line == "")
                    {

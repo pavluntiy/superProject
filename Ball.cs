@@ -24,9 +24,7 @@ namespace superProject
         public Quaternion rotationQuaternion;
         public Vector3 position;
         public Vector3 velocity;
-        public Vector3 force;
         public float mass;
-        public Vector3 impuls;
         public BoundingSphere boundingSphere;
         public Vector3 Home;
         public Vector3 rotation;
@@ -39,6 +37,7 @@ namespace superProject
         public Material currentMaterial;
 
 
+
        public int lives = 10;
        public int score = 10000;
 
@@ -46,7 +45,9 @@ namespace superProject
 
 
         public bool justDied;
+        float minHeight;
 
+        
         public Ball(Model model, Gaming parentGaming)
         {
             this.parentGaming = parentGaming;
@@ -57,12 +58,23 @@ namespace superProject
             
             this.rotationQuaternion = Quaternion.Identity;
             this.velocity = new Vector3(0, 0, 0);
-            this.force = new Vector3(0, 0, 0);
+    //        this.force = new Vector3(0, 0, 0);
             this.textures = new Dictionary<Material,Texture2D>();
 
             setMaterial(Material.Marble);
 
 
+        }
+
+        public void setData(int lives, int score, float minHeight)
+        {
+            this.lives = lives;
+            this.score = score;
+            this.minHeight = minHeight;
+        }
+
+        public void setPosition(Vector3 position){
+            this.Home = this.position = position;
         }
 
         public bool applyBonus(Bonus.BonusType type, Vector3 bonusPosition)
@@ -120,6 +132,8 @@ namespace superProject
             }
         }
 
+  
+
         public void applyForce(Vector3 force, GameTime time)
         {
 
@@ -138,7 +152,7 @@ namespace superProject
                 this.velocity.Y = previousVelocity.Y;
             }
 
-            if (this.velocity.Length() > 50.0f )
+            if (this.velocity.Length() > 60.0f )
             {
                 this.velocity = previousVelocity;
             }
@@ -180,6 +194,10 @@ namespace superProject
 //            Quaternion rotationThisFrame = Quaternion.CreateFromAxisAngle(axis, angle * (1 / this.radius));
 
             this.score -= 1;
+            if (this.position.Y < minHeight)
+            {
+                this.die();
+            }
            
         }
 

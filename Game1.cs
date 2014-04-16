@@ -66,7 +66,8 @@ namespace superProject
         //    state = new Cleared(this, ref graphics, ref spriteBatch, ref device);
           //  state = new Menu(this, ref graphics, ref spriteBatch, ref device);
          //   createGaming();
-            setMenu();
+            createGaming("Level0");
+         //   setMenu();
             base.LoadContent();
         }
 
