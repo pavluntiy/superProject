@@ -21,6 +21,9 @@ namespace superProject
         Matrix projectionMatrix;
         Ball ball;
         Effect skyBoxEffect;
+        float gravityAcceleration;
+        float forceCoef;
+
 
         enum Material {Wood, Metal, Slime, Lava, Marble, Plastic, Stone, Idle};
         struct WorldTriangle {
@@ -499,6 +502,7 @@ namespace superProject
 
 
         }
+        //Setting world stuff:
 
         WorldTriangle[] staticTriangles;
 
@@ -511,6 +515,12 @@ namespace superProject
             ball.setData(lives: Convert.ToInt32(strings[7]), score: Convert.ToInt32(strings[9]), minHeight: (float)Convert.ToDouble(strings[11])); 
             ball.setPosition(position);
         }
+        private void setWorldConstants(String str)
+        {
+            string[] strings = str.Split(new Char[] { '\n', ' ' });
+            this.gravityAcceleration = (float)Convert.ToDouble(strings[1]);
+            this.forceCoef = (float)Convert.ToDouble(strings[3]);
+        }            
         private void SetUpVertices()
         {
  
@@ -521,6 +531,8 @@ namespace superProject
                 line = sr.ReadLine();
                 setBall(line);
                 line = sr.ReadLine();
+                line = sr.ReadLine();
+                setWorldConstants(line);
                while (!sr.EndOfStream)
                {
                    line = sr.ReadLine();
@@ -622,7 +634,7 @@ namespace superProject
             tmp.Normalize();
             return tmp;
         }
-        Vector3 gravity = new Vector3(0, -10, 0);
+        
 
         private void interactWithWood(ref Vector3 force, ref Vector3 impuls, 
             ref Vector3 forceResult, ref Vector3 impulsResult,
@@ -945,7 +957,7 @@ namespace superProject
             force += forceResult;
         }
 
-        float forceCoef = 50f;
+       
 
         protected void ExitLevel()
         {
@@ -955,8 +967,10 @@ namespace superProject
         protected void applyAirResistance(ref Vector3 force){
             force += normalize(-ball.velocity) * 0.2f * ball.velocity.Length();
         }
+        
         public override void UpdateAll(GameTime gameTime)
         {
+ 
             enoughTimePassed(gameTime);
 
             KeyboardState keyState = Keyboard.GetState();
@@ -999,13 +1013,13 @@ namespace superProject
                 ball.Reset();
             }
 
-
+            Vector3 gravity = new Vector3(0, gravityAcceleration, 0);
             Vector3 impuls = ball.velocity * ball.mass;
-            force += gravity * ball.mass; 
+            force +=  gravity* ball.mass; 
             
             calculateCollisions(ref staticTriangles, ref ball, ref force, ref impuls);
 
-            if (ball.position.Y <= -60.0f)
+            if (ball.position.Y <= ball.minHeight)
             {
                 ball.die();
                 

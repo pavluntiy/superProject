@@ -29,11 +29,13 @@ namespace superProject
 
         protected void ButtonsInit()
         {
-            //    buttons = new Dictionary<string, Button>();
-            //  buttons["exit"] = new Button(this, "Exit", new Vector2(512, 256), 80, 20, Color.Yellow, Color.Gray);
-            buttons = new Button[1];
+            List<Button> bl = new List<Button>();
 
-            buttons[0] = new Button(this, "Exit", new Vector2(256, 440), 80, 20, Color.Yellow, Color.Gray);
+            bl.Add(new Button(this, "Exit", new Vector2(250, 300), 150, 20, Color.Yellow, Color.Gray));
+
+            currentButton = 0;
+            previousButtonColor = Color.Gray;
+            buttons = bl.ToArray();
 
             currentButton = 0;
             previousButtonColor = Color.Gray;
@@ -43,13 +45,6 @@ namespace superProject
         protected override void Initialize()
         {
             data = new Dictionary<string, string>();
-            //     parentGame.Content.RootDirectory = "Content";
-
-
-            //         parentGame.graphics.IsFullScreen = true;
-            //       parentGame.IsMouseVisible = true;
-            //     parentGame.graphics.ApplyChanges();
-
             base.Initialize();
         }
         protected override void LoadContent()
@@ -83,9 +78,9 @@ namespace superProject
 
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
-                if (currentButton == 0)
+                switch (buttons[currentButton].text)
                 {
-                    parentGame.exitToMenu();
+                    case "Exit": parentGame.exitToMenu(); break;
                 }
 
             }

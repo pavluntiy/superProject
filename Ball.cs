@@ -40,7 +40,7 @@ namespace superProject
 
        public int keysLeft = 0;
         public bool justDied;
-        float minHeight;
+        public float minHeight;
 
         
         public Ball(Model model, Gaming parentGaming)
