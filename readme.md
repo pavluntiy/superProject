@@ -27,7 +27,7 @@ I also have to confess that conception of encapsulation was deeply offended duri
 
 ##User's guide
 
-#Rules
+###Rules
 You are able to control a ball by applying forces to it in all three dimensions, so that it would get proper acceleration and, consequently, velocity.
 
 Your aim is to collect all silver spheres (they are keys) in order to finish level by touching black sphere. You also can pick up patchy colored balls, they add time to your timer. Blue spheres are lives and coral ones are checkpoints; if you gather a checkpoint ball, you will start your next attempt (if you have extra lives) from the last checkpoint.
@@ -54,7 +54,7 @@ There are also different possibilities for player's ball for changing type of ma
 * Stone. It has bloody red color. The heaviest one. It has ability to pass through lava without interacting with it.
 * Plastic. It is white and it has the smallest weight, so you are able to fly with it without limitations.
 
-#Controls
+###Controls
 * Arrows are used to apply force in horizontal plane in the respecting direction.
 * PageUp and PageDown keys are used to control vertical behavior
 * Home key is used to teleport instantly to the location of the last checkpoint (without any fines for usage).
@@ -105,6 +105,29 @@ You should also add a button into Selection.cs file as you add a new level.
 In order to do this go to function ButtonsInit() and add a button like it is stated there. You should understand, that buttons are selected by arrows in order of their enumeration in that function.
 Then you go to function UpdateAll() and add a new brach to the swicth operator.
 These metodics are appropriate for all classes inherited from State class.
+
+
+###Some words about code
+	
+My projects consists of twelve classes. One of them is main class of project, one (Game1) is the main class of ideology, particularily it contains the "state machine" which is responsible for switching between menus and gaming. The last interesting class is Ball, which maintains playing entity. Other classes are virtual class State, from which I derive other classes of state such as:
+
+* Menu. It is the main menu of the game
+* Gaming. It is the state of gaming. It contains the main plot of game. All intersections are processed here, and everything (during gaming process) is drawn by this class itself. 
+* Selection. Menu for level selection.
+* Loss. Appears when you lose.
+* Cleared. Appears when you win.
+* If you have read up to this place, please report me.
+* Pause. It has a very eloquent name.
+
+All these classes communicate with their parent (Game1) by callbacks, and they have references to their parent's fields, which are used for performing drawing routines.
+
+Important note. Yes, classes Game1 and Program were initially pre-generated during creating the project. But now they do not have anything from their original condition.
+
+Let us look up to several functions.
+
+<div style = "font-family: courier">calculateCollisions</div> can be calles one of the most important functions of the class Gaming:
+
+	
 
 ##Sources
 
