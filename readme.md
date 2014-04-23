@@ -1,5 +1,5 @@
 
-###Description of project
+#Description of project
 
 ##Aims and intentions
 
@@ -7,11 +7,11 @@ I was going to make something like Balance, an old game by Atatri. For this I de
 
 I didn't manage to clone Balance completely because it has many quite time-consuming features, but I believe that the plot is correctly transferred and impressions are not so dreadful as I could have expected.
 
-#About XNA
+###About XNA
 XNA support quite nice 3D graphics. The main its advantage is that it allows drawing textured triangles in a very simple way, loading models (actually, the only model I have used is model of a sphere) and it also provides checking for collisions of two bounding spheres. Unfortunately, XNA was not created to draw beautiful GUIs, so menus of my game were painted programmatically.
 
 ##Used algorithms
-As it was announce in the begining, my main intention wasn't to familiarize to any powerful algorithms. I was going to dive into 3D graphics and creating nice-looking (relatively) games.
+As it was announced in the begining, my main intention wasn't to familiarize to any powerful algorithms. I was going to dive into 3D graphics and creating nice-looking (relatively) games.
 
 I used algorithms of intersection of ball and a triangle. I found in the Internet one that served an example for me, but I had to change it drastically. I have also created some algos (functions) for calculating interactions between static blocks and the ball. You could have noticed some displays of its imperfectness: ball behaves in a very strange way on edges of blocks. In order to create such algorithms I used physics (mechanics) like law of impuls conservation and second Newton's law. I also used conception of state machine to organize my menus and selections.
 
@@ -62,7 +62,7 @@ There are also different possibilities for player's ball for changing type of ma
 * Control keys are used to rotate camera.
 * Escape has different meanings which depend on current state of game. During gaming it pauses the process.
 
-#Menu system
+###Menu system
 When the game is launched you can see a pretty well-designed menu. It is the main menu of the game. You are able to choose desired item by using arrows, when you select an item it is highlited, now you are able to press enter key to confirm your selection. By default, the exit item is selected. In the main menu escape button will have the same effect as selecting exit.
 Other menus have similar structure. 
 
@@ -73,32 +73,34 @@ When you loose, you are informed about this fact.
 ##Programmer's guide
 You are able to extend the game.
 You can add new levels and modify menus in a very simple way.
-#Adding new level
+
+###Adding new level
 You should create file names "LevelX levelData.txt". where LevelX is name of your level.
 This file contains information about world.
 It has the following structure:
 ball:
-material:  <initial material of ball> position: <initial position> lives: <initial quantity of lives> score: <initial score> minHeight: <minimal save height>
+material:  _initial_material_of_ball_ position: _initial_position_ lives: _initial_quantity_of_lives_ score: _initial_score_ minHeight: _minimal_save height_
 level:
-gravity:  <acceleration of gravity> force_coef: <absolute values of forces apllied by player>
-<type of block> <coordinates of block> <material>
+gravity:  _acceleration_of_gravity_ force_coef: _absolute_values_of_forces_apllied_by_player_
+_type_of_block_ _coordinates_of_block_ _material_
 
 You can choose from following block types: 
 * "cube". Parrallelipiped, actually.
 * "wedge"
 * "pyramid"
 * "plain"
-<coordinates of block> is enumeration of four different point in space. Each point is given by three coordinates in space (X, Y, Z) without any delimeters between points or their coordinates! You also shouldn't use additional newlines and spaces.
+_coordinates_of_block_ is enumeration of four different point in space. Each point is given by three coordinates in space (X, Y, Z) without any delimeters between points or their coordinates! You also shouldn't use additional newlines and spaces.
 
 The second file that has to be created is bonus data file. It has name "LevelX bonusesData.txt".  It has a quite similar structure.
 	...
-<bonus type> <coordinates>
-...
+_bonus_type_ _coordinates_
+	...
 Bonus types are {Save, Live, Score, End, Key}. You can add them to game without any limitations.
-Coordinates are (X, Y, Z) enumerated without any delimiters or additional spaces.
+Coordinates are (X, Y, Z) enumerated without any delimiters or additional spaces. You need't specify how many bonuses you are going to add.
+
 You can define coordinates in floating-point format.
 
-#Defining a button.
+###Defining a button.
 You should also add a button into Selection.cs file as you add a new level.
 In order to do this go to function ButtonsInit() and add a button like it is stated there. You should understand, that buttons are selected by arrows in order of their enumeration in that function.
 Then you go to function UpdateAll() and add a new brach to the swicth operator.
@@ -108,10 +110,9 @@ These metodics are appropriate for all classes inherited from State class.
 
 Working on this project I used:
 * Riemer's XNA tutorial: http://www.riemers.net/
-* Stackoverflow and 
+* Stackoverflow and other thematical forums
 * Official Microsoft documentation: http://msdn.microsoft.com/en-us/library
 * C# 5.0 in a Nutshell by Joseph Albahari
-* 
 
 
 
