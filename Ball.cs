@@ -16,7 +16,7 @@ namespace superProject
 
     class Ball
     {
-        protected Gaming parentGaming;
+        protected Gaming parentGaming; //Used to report the game, that it should change the state.
         public Model model;
         public Quaternion rotationQuaternion;
         public Vector3 position;
@@ -26,10 +26,10 @@ namespace superProject
         public Vector3 Home;
         public Vector3 rotation;
         public float angle;
-        public float radius = 1.0f;
+        public float radius = 1.0f; //radius of the bounding sphere.
         
 
-        public enum Material {Marble, Plastic, Stone, Idle};
+        public enum Material {Marble, Plastic, Stone, Idle};//Materials, which are available for ball. Idle is used only in switches to create nice default branches.
         public Dictionary<Material, Texture2D> textures;
         public Material currentMaterial;
         float maxVelocity = 60.0f;
@@ -40,7 +40,7 @@ namespace superProject
 
        public int keysLeft = 0;
         public bool justDied;
-        public float minHeight;
+        public float minHeight; //After getting lower minHeight, ball dies
 
         
         public Ball(Model model, Gaming parentGaming)
@@ -61,7 +61,7 @@ namespace superProject
 
         public void setData(int lives, int score, float minHeight)
         {
-            this.lives = lives;
+            this.lives = lives; 
             this.score = score;
             this.minHeight = minHeight;
         }
@@ -132,7 +132,7 @@ namespace superProject
 
             if (this.currentMaterial == Ball.Material.Marble)
             {
-                force.Y = Math.Min(2.5f, force.Y);
+                force.Y = Math.Min(2.5f, force.Y); //Limitations for Marble ball. It shouldn't fly in a usual way.
             }
             var previousVelocity = this.velocity;
             var timePassed = (float)time.ElapsedGameTime.TotalSeconds;
@@ -145,7 +145,7 @@ namespace superProject
                 this.velocity.Y = previousVelocity.Y;
             }
 
-            if (this.velocity.Length() > maxVelocity )
+            if (this.velocity.Length() > maxVelocity ) //Limitation for max velocity.
             {
                 this.velocity = previousVelocity;
             }
@@ -153,14 +153,14 @@ namespace superProject
 
         public void applyImpuls(Vector3 impuls)
         {
-            this.velocity = impuls / this.mass;
+            this.velocity = impuls / this.mass; //Applying impuls back after interacting with world elements.
         }
 
         
-        public void Reset()
+        public void Reset()//Is called after death or pressing Home key.
         {
             this.position = this.Home;
-            this.stop();
+            this.stop(); 
             this.boundingSphere.Center = this.position;
         }
         public void update(GameTime time)
@@ -192,7 +192,8 @@ namespace superProject
             this.lives--;
         }
 
-        public bool isDead()
+        public bool isDead() //Prevents parentGaming from updating ball, which has just died. It is necessary, because influences and deaths are calculated simultaneously, 
+            //so we could unintentionally apply impuls (which was reflected or something like this) to a dead ball.
         {
             if (this.justDied)
             {

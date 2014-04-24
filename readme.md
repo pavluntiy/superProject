@@ -324,6 +324,8 @@ UpdateAll:
         }
 ````
 
+So, in UpdateAll() (which was designed to replace Update(), which is virtual method of Game class (XNA class)) processes keys and calls methods that update Ball state.
+
 DrawAll:
 
 ````csharp
@@ -360,6 +362,288 @@ DrawAll:
             DrawBallData();
             
             base.Draw(gameTime);
+        }
+    }
+````
+As we can see here, DrawAll sets all 3D drawing options and calls methods, which draw corresponding parts of world.
+
+Now let us have a look to a class, which is inherited by most classes in the game:
+
+````csharp
+	namespace superProject
+{
+    class State : Game
+    {
+        protected int currentButton; //Stores number of selected button, if you press Enter key, corresponing action will happen.
+        protected Color previousButtonColor; //Used for restoring color of the button after setting it to inactive state.
+        protected Game1 parentGame; //Gives access to drawing devices, which are able to interact with the window of the game.
+        protected GraphicsDeviceManager graphics;//Reference to one of drawing devices
+        protected SpriteBatch spriteBatch;//The same
+        protected GraphicsDevice device;//The same
+
+        protected SpriteFont font; //Font for printing text on the screen. Fonts in XNA are not scalable.
+
+        protected Button[] buttons; //Buttons of menu
+        public Dictionary<String, String> data;//Some data, that has to be stored for some reasons. Used, for instance, in Cleared class for storing results of the level
+        public MouseState previousMouseState; 
+
+        public String name; //Used to store name of current level.
+
+
+        public virtual void drawRectangle(Color color, int xSize, int ySize, Vector2 position)
+        {
+            Texture2D rect = new Texture2D(graphics.GraphicsDevice, xSize, ySize);
+
+            Color[] data = new Color[xSize * ySize];
+            for (int i = 0; i < data.Length; ++i)
+            {
+                data[i] = color;
+            }
+                rect.SetData(data);
+             spriteBatch.Begin();
+                spriteBatch.Draw(rect, position, Color.White);
+             spriteBatch.End();
+            
+        }
+
+        protected void switchButtons(int d) //Used to swithc buttons. We pass them one-after-another in order of adding them to ButtonsList.
+        {
+            buttons[currentButton].backgroundColor = previousButtonColor;
+            currentButton = (currentButton + d + buttons.Length) % buttons.Length;
+
+            previousButtonColor = buttons[currentButton].backgroundColor;
+            buttons[currentButton].backgroundColor = Color.Green;
+        }
+
+        float timeSpan = 0;
+
+        protected bool enoughTimePassed(GameTime gameTime)//It is a fucntion, which allows us to maintain proper time span between player's actions.
+        {
+            timeSpan += gameTime.ElapsedGameTime.Milliseconds;
+            if (timeSpan < 200f)
+            {
+                return false;
+            }
+            timeSpan = 0;
+            return true;
+        }
+
+        public virtual void writeMessage(String message, Vector2 where, Color color)
+        {
+            spriteBatch.Begin();
+                spriteBatch.DrawString(font, message, where, color);
+               spriteBatch.End();
+                device.BlendState = BlendState.Opaque;
+                device.DepthStencilState = DepthStencilState.Default;
+        }
+        public virtual void DrawAll(GameTime gameTime)
+        {
+
+        }
+        public virtual void UpdateAll(GameTime gameTime)
+        {
+
+        }
+
+    }
+}
+````
+
+The other interesting place in code is Ball class:
+````csharp
+	   class Ball
+    {
+        protected Gaming parentGaming; //Used to report the game, that it should change the state.
+        public Model model;
+        public Quaternion rotationQuaternion;
+        public Vector3 position;
+        public Vector3 velocity;
+        public float mass;
+        public BoundingSphere boundingSphere;
+        public Vector3 Home;
+        public Vector3 rotation;
+        public float angle;
+        public float radius = 1.0f; //radius of the bounding sphere.
+        
+
+        public enum Material {Marble, Plastic, Stone, Idle};//Materials, which are available for ball. Idle is used only in switches to create nice default branches.
+        public Dictionary<Material, Texture2D> textures;
+        public Material currentMaterial;
+        float maxVelocity = 60.0f;
+
+
+       public int lives;
+       public int score;
+
+       public int keysLeft = 0;
+        public bool justDied;
+        public float minHeight; //After getting lower minHeight, ball dies
+
+        
+        public Ball(Model model, Gaming parentGaming)
+        {
+            this.parentGaming = parentGaming;
+            this.model = model;
+
+            this.boundingSphere = new BoundingSphere(this.position, this.radius);
+            
+            this.rotationQuaternion = Quaternion.Identity;
+            this.velocity = new Vector3(0, 0, 0);
+            this.textures = new Dictionary<Material,Texture2D>();
+
+            setMaterial(Material.Marble);
+
+
+        }
+
+        public void setData(int lives, int score, float minHeight)
+        {
+            this.lives = lives; 
+            this.score = score;
+            this.minHeight = minHeight;
+        }
+
+        public void setPosition(Vector3 position){
+            this.Home = this.position = position;
+        }
+
+        public bool applyBonus(Bonus.BonusType type, Vector3 bonusPosition)
+        {
+
+            if (type == Bonus.BonusType.End)
+            {
+                if (keysLeft > 0)
+                {
+                    return false;
+                }
+                parentGaming.levelCleared();
+                
+            }
+
+
+            if (type == Bonus.BonusType.Key)
+            {
+                this.keysLeft--;
+            }
+            if (type == Bonus.BonusType.Live)
+            {
+                this.lives++;
+            }
+
+            if (type == Bonus.BonusType.Score)
+            {
+                this.score += 1000;
+            }
+
+
+            if (type == Bonus.BonusType.Save)
+            {
+                this.Home = bonusPosition;
+            }
+
+            return true;
+        }
+        public void setMaterial(Material material)
+        {
+            this.currentMaterial = material;
+            if (material == Material.Marble)
+            {
+                this.mass = 1f;
+            }
+
+            if (material == Material.Plastic)
+            {
+                this.mass = 0.5f;
+            }
+
+            if (material == Material.Stone)
+            {
+                this.mass = 5.0f;
+            }
+        }
+
+  
+
+        public void applyForce(Vector3 force, GameTime time)
+        {
+
+            if (this.currentMaterial == Ball.Material.Marble)
+            {
+                force.Y = Math.Min(2.5f, force.Y); //Limitations for Marble ball. It shouldn't fly in a usual way.
+            }
+            var previousVelocity = this.velocity;
+            var timePassed = (float)time.ElapsedGameTime.TotalSeconds;
+
+            this.velocity += force / mass * timePassed;
+
+
+            if (this.currentMaterial == Ball.Material.Marble && this.velocity.Y > 0.5f && this.velocity.Y - previousVelocity.Y > 0)
+            {
+                this.velocity.Y = previousVelocity.Y;
+            }
+
+            if (this.velocity.Length() > maxVelocity ) //Limitation for max velocity.
+            {
+                this.velocity = previousVelocity;
+            }
+        }
+
+        public void applyImpuls(Vector3 impuls)
+        {
+            this.velocity = impuls / this.mass; //Applying impuls back after interacting with world elements.
+        }
+
+        
+        public void Reset()//Is called after death or pressing Home key.
+        {
+            this.position = this.Home;
+            this.stop(); 
+            this.boundingSphere.Center = this.position;
+        }
+        public void update(GameTime time)
+        {
+            this.position += this.velocity * (float)time.ElapsedGameTime.TotalSeconds; 
+            this.boundingSphere.Center = this.position;
+
+            this.rotation = this.velocity * MathHelper.ToRadians(-1.5f);
+            this.angle += this.velocity.Length() /(-100.0f / this.radius);
+            Vector3 axis = Vector3.Cross(this.velocity, Vector3.Up);
+            if (axis != Vector3.Zero)
+            {
+                axis.Normalize();
+            }
+            rotationQuaternion = Quaternion.CreateFromAxisAngle(axis, angle);
+
+            this.score -= 1;
+            if (this.position.Y < minHeight)
+            {
+                this.die();
+            }
+           
+        }
+
+        public void die()
+        {
+            this.Reset();
+            this.justDied = true;
+            this.lives--;
+        }
+
+        public bool isDead() //Prevents parentGaming from updating ball, which has just died. It is necessary, because influences and deaths are calculated simultaneously, 
+            //so we could unintentionally apply impuls (which was reflected or something like this) to a dead ball.
+        {
+            if (this.justDied)
+            {
+                this.justDied = false;
+                return true;
+            }
+
+            return false;
+        }
+
+        public void stop()
+        {
+            this.velocity = new Vector3(0, 0, 0);
         }
     }
 ````

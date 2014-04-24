@@ -15,20 +15,20 @@ namespace superProject
 {
     class State : Game
     {
-        protected int currentButton;
-        protected Color previousButtonColor;
-        protected Game1 parentGame;
-        protected GraphicsDeviceManager graphics;
-        protected SpriteBatch spriteBatch;
-        protected GraphicsDevice device;
+        protected int currentButton; //Stores number of selected button, if you press Enter key, corresponing action will happen.
+        protected Color previousButtonColor; //Used for restoring color of the button after setting it to inactive state.
+        protected Game1 parentGame; //Gives access to drawing devices, which are able to interact with the window of the game.
+        protected GraphicsDeviceManager graphics;//Reference to one of drawing devices
+        protected SpriteBatch spriteBatch;//The same
+        protected GraphicsDevice device;//The same
 
-        protected SpriteFont font;
+        protected SpriteFont font; //Font for printing text on the screen. Fonts in XNA are not scalable.
 
-        protected Button[] buttons;
-        public Dictionary<String, String> data;
-        public MouseState previousMouseState;
+        protected Button[] buttons; //Buttons of menu
+        public Dictionary<String, String> data;//Some data, that has to be stored for some reasons. Used, for instance, in Cleared class for storing results of the level
+        public MouseState previousMouseState; 
 
-        public String name;
+        public String name; //Used to store name of current level.
 
 
         public virtual void drawRectangle(Color color, int xSize, int ySize, Vector2 position)
@@ -47,7 +47,7 @@ namespace superProject
             
         }
 
-        protected void switchButtons(int d)
+        protected void switchButtons(int d) //Used to swithc buttons. We pass them one-after-another in order of adding them to ButtonsList.
         {
             buttons[currentButton].backgroundColor = previousButtonColor;
             currentButton = (currentButton + d + buttons.Length) % buttons.Length;
@@ -58,7 +58,7 @@ namespace superProject
 
         float timeSpan = 0;
 
-        protected bool enoughTimePassed(GameTime gameTime)
+        protected bool enoughTimePassed(GameTime gameTime)//It is a fucntion, which allows us to maintain proper time span between player's actions.
         {
             timeSpan += gameTime.ElapsedGameTime.Milliseconds;
             if (timeSpan < 200f)
