@@ -644,44 +644,48 @@ namespace superProject
         {
 
                    
-                    float cos = Vector3.Dot(Vector3.Normalize(normal), Vector3.Normalize(force));
-                    if (force == Vector3.Zero)
+                    float cos = Vector3.Dot(Vector3.Normalize(normal), Vector3.Normalize(force)); //We calculate cosine between the normal vector of the 
+                                                                                                  //triangle and the force vector in order to determine 
+                    if (force == Vector3.Zero)                                                    //if we need to apply this force
                     {
                         cos = 0.0f;
                     }
                     var currentForceComponent = -cos * force.Length() * normal;
 
-                    bool tmp = usedNormals.ContainsKey(normal);
+                    //Here we make some magic. We have to process situation of seam of two triangles in one plain.
+                    //If we do not check it, our ball will either fall through the seam or get double acceleration or impuls
                     if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1 && cos <= 0)
                     {
                         forceResult += currentForceComponent;
                     }
+                    //Simultaniously we check if we have to apply this force, so the ball wouldn't be absorbed.
                
-                    
+                    //We impuls is zero, we exit, because we have alreadey applied force (it is a reference variable), and we don't need to reflect zero impuls.
                     if (impuls == Vector3.Zero)
                     {
                         return;
                     }
                     cos = Vector3.Dot(Vector3.Normalize(impuls), normal);
-                    var currentImpulsComponent = -cos * impuls.Length() * normal; //<--WTF?!
-                    //WTF?!
+                    var currentImpulsComponent = -cos * impuls.Length() * normal; 
 
-                    remainingImpuls = 0.999f * remainingImpuls;
+
+                    remainingImpuls = 0.999f * remainingImpuls; //It is friction. I was going do make a changeable coefficient, but even with such a small (0.001) measure of frcition the ball slows down drastically.
 
                     if (!usedNormals.ContainsKey(normal) && cos <= 0 && !onEdge || onEdge && usedNormals.ContainsKey(normal) && usedNormals[normal] == 1 && cos <= 0)
+                    //Here we do the same thing, as we did before with force, with impuls.
                     {
                         remainingImpuls += currentImpulsComponent;
                     }
 
                     
-                    if (Math.Abs(remainingImpuls.Y) < 10E-5)
+                   if (Math.Abs(remainingImpuls.Y) < 10E-5)//It is necessary because the ball starts unprovoked moving due to imperfectness of floating-point operations
                     {
                         remainingImpuls.Y = 0;
                     }
-
+            
 
                                
-                    if(!usedNormals.ContainsKey(normal)){
+                    if(!usedNormals.ContainsKey(normal)){//We add used normals to make our magic work.
                         usedNormals.Add(normal, 1);
                     }
                     else {
@@ -909,14 +913,13 @@ namespace superProject
         }
         private void calculateCollisions(ref WorldTriangle[] triangles, ref Ball ball, ref Vector3 force, ref Vector3 impuls){
 
-            Dictionary<Vector3, int> usedNormals = new Dictionary<Vector3, int>();
-            HashSet<Vector3> forces = new HashSet<Vector3>();
+            Dictionary<Vector3, int> usedNormals = new Dictionary<Vector3, int>(); 
             Vector3 remainingForce = Vector3.Zero;
             Vector3  impulsResult = new Vector3(0, 0, 0), forceResult = new Vector3(0, 0, 0), remainingImpuls = impuls;
-            foreach(var triangle in triangles){
+            foreach(var triangle in triangles){ //we check if we intersect with each triangle of the world.
                 Vector3[] ct = new Vector3[]{triangle.A, triangle.B, triangle.C};
                 Vector3 normal = triangle.normal;
-                bool onEdge;
+                bool onEdge; //It is very important to process edges accurately
                 
 
                 if (Intersects(ref ball.boundingSphere, ref ct, out onEdge))
