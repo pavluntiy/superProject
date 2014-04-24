@@ -649,6 +649,7 @@ The other interesting place in code is Ball class:
 ````
 	
 
+So, I hope that these snippets of code are able to create proper impression about the ways I used to write such a game.
 ##Sources
 
 Working on this project I used:

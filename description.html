@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+<body>
+<head>
+	<title> Description of superProject </title>
+</head>
+<style>
+	h2{
+		font-size: 25px;
+		font-family: sans-serif;
+	}
+
+	h1{
+		font-size: 35px;
+		font-family: sans-serif;
+	}
+
+	h3{
+		font-size: 15px;
+		font-family: sans-serif;
+	}
+</style>
+<a name="user-content-description-of-project" class="anchor" href="#description-of-project"><span class="octicon octicon-link"></span></a>Description of project</h1>
+
+<h2>
+<a name="user-content-aims-and-intentions" class="anchor" href="#aims-and-intentions"><span class="octicon octicon-link"></span></a>Aims and intentions</h2>
+
+<p>I was going to make something like Balance, an old game by Atatri. For this I decided to familiarize with basics of 3D Graphics. I used XNA for .NET platform instead of adhering to my initial intention to use Qt wrappers for OpenGl, because they seemed  inefficient and I thought it is a great idea to study a new programing language (C#).</p>
+
+<p>I didn't manage to clone Balance completely because it has many quite time-consuming features, but I believe that the plot is correctly transferred and impressions are not so dreadful as I could have expected.</p>
+
+<h3>
+<a name="user-content-about-xna" class="anchor" href="#about-xna"><span class="octicon octicon-link"></span></a>About XNA</h3>
+
+<p>XNA support quite nice 3D graphics. The main its advantage is that it allows drawing textured triangles in a very simple way, loading models (actually, the only model I have used is model of a sphere) and it also provides checking for collisions of two bounding spheres. Unfortunately, XNA was not created to draw beautiful GUIs, so menus of my game were painted programmatically.</p>
+
+<h2>
+<a name="user-content-used-algorithms" class="anchor" href="#used-algorithms"><span class="octicon octicon-link"></span></a>Used algorithms</h2>
+
+<p>As it was announced in the begining, my main intention wasn't to familiarize to any powerful algorithms. I was going to dive into 3D graphics and creating nice-looking (relatively) games.</p>
+
+<p>I used algorithms of intersection of ball and a triangle. I found in the Internet one that served an example for me, but I had to change it drastically. I have also created some algos (functions) for calculating interactions between static blocks and the ball. You could have noticed some displays of its imperfectness: ball behaves in a very strange way on edges of blocks. In order to create such algorithms I used physics (mechanics) like law of impuls conservation and second Newton's law. I also used conception of state machine to organize my menus and selections.</p>
+
+<p>Ball in my game obeys laws of impuls conservation. If it hits appropriate surfaces (metal), it reflects properly. Wood and other types of materials extinguish complitly normal component of impuls vector.</p>
+
+<p>Second Newton's law is also performed properly. When you apply force (or gravitation does) ball gets acceleration according to widely known formula.</p>
+
+<p>I have also added a rotation effect. When the ball is rolling, its surface also rotates in an appropriate way. </p>
+
+<p>I created several classes for organization of my game. Most of them are designed to provide menus and selection screens. I also used structure, that stores position, normal and texture.</p>
+
+<p>I also have to confess that conception of encapsulation was deeply offended during creating this project.</p>
+
+<h2>
+<a name="user-content-users-guide" class="anchor" href="#users-guide"><span class="octicon octicon-link"></span></a>User's guide</h2>
+
+<h3>
+<a name="user-content-rules" class="anchor" href="#rules"><span class="octicon octicon-link"></span></a>Rules</h3>
+
+<p>You are able to control a ball by applying forces to it in all three dimensions, so that it would get proper acceleration and, consequently, velocity.</p>
+
+<p>Your aim is to collect all silver spheres (they are keys) in order to finish level by touching black sphere. You also can pick up patchy colored balls, they add time to your timer. Blue spheres are lives and coral ones are checkpoints; if you gather a checkpoint ball, you will start your next attempt (if you have extra lives) from the last checkpoint.</p>
+
+<p>You should avoid falling down and touching some types of blocks (like lava).
+In the upper-left corner of the screen you can see counters of time, lives and keys left before you can leave the level.</p>
+
+<p>World consists of blocks, which consist of different materials.</p>
+
+<p>There are four types of block:</p>
+
+<ul>
+<li>Parallelepipeds</li>
+<li>Pyramids</li>
+<li>Wedges</li>
+<li>Plains</li>
+</ul><p>There exist several types of materials:</p>
+
+<ul>
+<li>Wood. Collision is perfectly inelastic, exists friction.</li>
+<li>Metal. Collision is perfectly elastic, no friction.</li>
+<li>Lava. Lethal for all types of balls except the stone ones.</li>
+<li>Slime. It has the biggest measure of friction, it absorbs balls which get to it. Fatal for plastic balls.</li>
+</ul><p>There are also different possibilities for player's ball for changing type of material, which lead to changes of its manner of physical interactions.</p>
+
+<ul>
+<li>Marble. Slightly orange. It has medium weight and a tiny flying skill. The most easy controlled ball.</li>
+<li>Stone. It has bloody red color. The heaviest one. It has ability to pass through lava without interacting with it.</li>
+<li>Plastic. It is white and it has the smallest weight, so you are able to fly with it without limitations.</li>
+</ul><h3>
+<a name="user-content-controls" class="anchor" href="#controls"><span class="octicon octicon-link"></span></a>Controls</h3>
+
+<ul>
+<li>Arrows are used to apply force in horizontal plane in the respecting direction.</li>
+<li>PageUp and PageDown keys are used to control vertical behavior</li>
+<li>Home key is used to teleport instantly to the location of the last checkpoint (without any fines for usage).</li>
+<li>End key is used for instant stop. (Velocity is assigned to zero). This key wasn't expected to survive up to the release version.</li>
+<li>Control keys are used to rotate camera.</li>
+<li>Escape has different meanings which depend on current state of game. During gaming it pauses the process.</li>
+</ul><h3>
+<a name="user-content-menu-system" class="anchor" href="#menu-system"><span class="octicon octicon-link"></span></a>Menu system</h3>
+
+<p>When the game is launched you can see a pretty well-designed menu. It is the main menu of the game. You are able to choose desired item by using arrows, when you select an item it is highlited, now you are able to press enter key to confirm your selection. By default, the exit item is selected. In the main menu escape button will have the same effect as selecting exit.
+Other menus have similar structure. </p>
+
+<p>When you are playing you can pause your game by pressing escape. Second hit to escape button (as well as selecting the correspoding item) will return you back to the game.
+When you won you can see screen with your results.
+When you loose, you are informed about this fact.</p>
+
+<h2>
+<a name="user-content-programmers-guide" class="anchor" href="#programmers-guide"><span class="octicon octicon-link"></span></a>Programmer's guide</h2>
+
+<p>You are able to extend the game.
+You can add new levels and modify menus in a very simple way.</p>
+
+<h3>
+<a name="user-content-adding-new-level" class="anchor" href="#adding-new-level"><span class="octicon octicon-link"></span></a>Adding new level</h3>
+
+<p>You should create file names "LevelX levelData.txt". where LevelX is name of your level.
+This file contains information about world.
+It has the following structure:
+ball:
+material:  <em>initial_material_of_ball</em> position: <em>initial_position</em> lives: <em>initial_quantity_of_lives</em> score: <em>initial_score</em> minHeight: <em>minimal_save height</em>
+level:
+gravity:  <em>acceleration_of_gravity</em> force_coef: <em>absolute_values_of_forces_apllied_by_player</em>
+<em>type_of_block</em> <em>coordinates_of_block</em> <em>material</em></p>
+
+<p>You can choose from following block types: </p>
+
+<ul>
+<li>"cube". Parrallelipiped, actually.</li>
+<li>"wedge"</li>
+<li>"pyramid"</li>
+<li>"plain"
+<em>coordinates_of_block</em> is enumeration of four different point in space. Each point is given by three coordinates in space (X, Y, Z) without any delimeters between points or their coordinates! You also shouldn't use additional newlines and spaces.</li>
+</ul><p>The second file that has to be created is bonus data file. It has name "LevelX bonusesData.txt".  It has a quite similar structure.
+    ...
+<em>bonus_type</em> <em>coordinates</em>
+    ...
+Bonus types are {Save, Live, Score, End, Key}. You can add them to game without any limitations.
+Coordinates are (X, Y, Z) enumerated without any delimiters or additional spaces. You need't specify how many bonuses you are going to add.</p>
+
+<p>You can define coordinates in floating-point format.</p>
+
+<h3>
+<a name="user-content-defining-a-button" class="anchor" href="#defining-a-button"><span class="octicon octicon-link"></span></a>Defining a button.</h3>
+
+<p>You should also add a button into Selection.cs file as you add a new level.
+In order to do this go to function ButtonsInit() and add a button like it is stated there. You should understand, that buttons are selected by arrows in order of their enumeration in that function.
+Then you go to function UpdateAll() and add a new brach to the swicth operator.
+These metodics are appropriate for all classes inherited from State class.</p>
+
+<h3>
+<a name="user-content-some-words-about-code" class="anchor" href="#some-words-about-code"><span class="octicon octicon-link"></span></a>Some words about code</h3>
+
+<p>My projects consists of twelve classes. One of them is main class of project, one (Game1) is the main class of ideology, particularily it contains the "state machine" which is responsible for switching between menus and gaming. The last interesting class is Ball, which maintains playing entity. Other classes are virtual class State, from which I derive other classes of state such as:</p>
+
+<ul>
+<li>Menu. It is the main menu of the game</li>
+<li>Gaming. It is the state of gaming. It contains the main plot of game. All intersections are processed here, and everything (during gaming process) is drawn by this class itself. </li>
+<li>Selection. Menu for level selection.</li>
+<li>Loss. Appears when you lose.</li>
+<li>Cleared. Appears when you win.</li>
+<li>If you have read up to this place, please report me.</li>
+<li>Pause. It has a very eloquent name.</li>
+</ul><p>All these classes communicate with their parent (Game1) by callbacks, and they have references to their parent's fields, which are used for performing drawing routines.</p>
+
+<p>Important note. Yes, classes Game1 and Program were initially pre-generated during creating the project. But now they do not have anything from their original condition.</p>
+
+<p>Let us look up to several functions.</p>
+
+<p></p><div>calculateCollisions</div> can be calles one of the most important functions of the class Gaming:
+
+<div class="highlight highlight-csharp"><pre>            <span class="k">private</span> <span class="k">void</span> <span class="nf">calculateCollisions</span><span class="p">(</span><span class="k">ref</span> <span class="n">WorldTriangle</span><span class="p">[]</span> <span class="n">triangles</span><span class="p">,</span> <span class="k">ref</span> <span class="n">Ball</span> <span class="n">ball</span><span class="p">,</span> <span class="k">ref</span> <span class="n">Vector3</span> <span class="n">force</span><span class="p">,</span> <span class="k">ref</span> <span class="n">Vector3</span> <span class="n">impuls</span><span class="p">){</span>
+
+            <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Vector3</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">usedNormals</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Vector3</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;();</span> 
+            <span class="n">Vector3</span> <span class="n">remainingForce</span> <span class="p">=</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Zero</span><span class="p">;</span>
+            <span class="n">Vector3</span>  <span class="n">impulsResult</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> <span class="n">forceResult</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> <span class="n">remainingImpuls</span> <span class="p">=</span> <span class="n">impuls</span><span class="p">;</span>
+            <span class="k">foreach</span><span class="p">(</span><span class="kt">var</span> <span class="n">triangle</span> <span class="k">in</span> <span class="n">triangles</span><span class="p">){</span> <span class="c1">//we check if we intersect with each triangle of the world.</span>
+                <span class="n">Vector3</span><span class="p">[]</span> <span class="n">ct</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">[]{</span><span class="n">triangle</span><span class="p">.</span><span class="n">A</span><span class="p">,</span> <span class="n">triangle</span><span class="p">.</span><span class="n">B</span><span class="p">,</span> <span class="n">triangle</span><span class="p">.</span><span class="n">C</span><span class="p">};</span>
+                <span class="n">Vector3</span> <span class="n">normal</span> <span class="p">=</span> <span class="n">triangle</span><span class="p">.</span><span class="n">normal</span><span class="p">;</span>
+                <span class="kt">bool</span> <span class="n">onEdge</span><span class="p">;</span> <span class="c1">//It is very important to process edges accurately</span>
+
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">Intersects</span><span class="p">(</span><span class="k">ref</span> <span class="n">ball</span><span class="p">.</span><span class="n">boundingSphere</span><span class="p">,</span> <span class="k">ref</span> <span class="n">ct</span><span class="p">,</span> <span class="k">out</span> <span class="n">onEdge</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">normal</span> <span class="p">==</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Zero</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">continue</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">triangle</span><span class="p">.</span><span class="n">material</span> <span class="p">==</span> <span class="n">Material</span><span class="p">.</span><span class="n">Wood</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">interactWithWood</span><span class="p">(</span><span class="k">ref</span> <span class="n">force</span><span class="p">,</span> <span class="k">ref</span> <span class="n">impuls</span><span class="p">,</span> <span class="k">ref</span> <span class="n">forceResult</span><span class="p">,</span> <span class="k">ref</span> <span class="n">impulsResult</span><span class="p">,</span> <span class="k">ref</span> <span class="n">remainingForce</span><span class="p">,</span> <span class="k">ref</span> <span class="n">remainingImpuls</span><span class="p">,</span> <span class="k">ref</span> <span class="n">usedNormals</span><span class="p">,</span> <span class="k">ref</span> <span class="n">onEdge</span><span class="p">,</span> <span class="k">ref</span> <span class="n">normal</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">triangle</span><span class="p">.</span><span class="n">material</span> <span class="p">==</span> <span class="n">Material</span><span class="p">.</span><span class="n">Metal</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">interactWithMetal</span><span class="p">(</span><span class="k">ref</span> <span class="n">force</span><span class="p">,</span> <span class="k">ref</span> <span class="n">impuls</span><span class="p">,</span> <span class="k">ref</span> <span class="n">forceResult</span><span class="p">,</span> <span class="k">ref</span> <span class="n">impulsResult</span><span class="p">,</span> <span class="k">ref</span> <span class="n">remainingForce</span><span class="p">,</span> <span class="k">ref</span> <span class="n">remainingImpuls</span><span class="p">,</span> <span class="k">ref</span> <span class="n">usedNormals</span><span class="p">,</span> <span class="k">ref</span> <span class="n">onEdge</span><span class="p">,</span> <span class="k">ref</span> <span class="n">normal</span><span class="p">);</span>
+                    <span class="p">}</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">triangle</span><span class="p">.</span><span class="n">material</span> <span class="p">==</span> <span class="n">Material</span><span class="p">.</span><span class="n">Lava</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">interactWithLava</span><span class="p">(</span><span class="k">ref</span> <span class="n">force</span><span class="p">,</span> <span class="k">ref</span> <span class="n">impuls</span><span class="p">,</span> <span class="k">ref</span> <span class="n">forceResult</span><span class="p">,</span> <span class="k">ref</span> <span class="n">impulsResult</span><span class="p">,</span> <span class="k">ref</span> <span class="n">remainingForce</span><span class="p">,</span> <span class="k">ref</span> <span class="n">remainingImpuls</span><span class="p">,</span> <span class="k">ref</span> <span class="n">usedNormals</span><span class="p">,</span> <span class="k">ref</span> <span class="n">onEdge</span><span class="p">,</span> <span class="k">ref</span> <span class="n">normal</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">triangle</span><span class="p">.</span><span class="n">material</span> <span class="p">==</span> <span class="n">Material</span><span class="p">.</span><span class="n">Slime</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">interactWithSlime</span><span class="p">(</span><span class="k">ref</span> <span class="n">force</span><span class="p">,</span> <span class="k">ref</span> <span class="n">impuls</span><span class="p">,</span> <span class="k">ref</span> <span class="n">forceResult</span><span class="p">,</span> <span class="k">ref</span> <span class="n">impulsResult</span><span class="p">,</span> <span class="k">ref</span> <span class="n">remainingForce</span><span class="p">,</span> <span class="k">ref</span> <span class="n">remainingImpuls</span><span class="p">,</span> <span class="k">ref</span> <span class="n">usedNormals</span><span class="p">,</span> <span class="k">ref</span> <span class="n">onEdge</span><span class="p">,</span> <span class="k">ref</span> <span class="n">normal</span><span class="p">);</span>
+                    <span class="p">}</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">triangle</span><span class="p">.</span><span class="n">material</span> <span class="p">==</span> <span class="n">Material</span><span class="p">.</span><span class="n">Marble</span> <span class="p">||</span> 
+                        <span class="n">triangle</span><span class="p">.</span><span class="n">material</span> <span class="p">==</span> <span class="n">Material</span><span class="p">.</span><span class="n">Plastic</span> <span class="p">||</span>
+                        <span class="n">triangle</span><span class="p">.</span><span class="n">material</span> <span class="p">==</span> <span class="n">Material</span><span class="p">.</span><span class="n">Stone</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">interactWithTransformer</span><span class="p">(</span><span class="n">triangle</span><span class="p">.</span><span class="n">material</span><span class="p">,</span> <span class="k">ref</span> <span class="n">force</span><span class="p">,</span> <span class="k">ref</span> <span class="n">impuls</span><span class="p">,</span> <span class="k">ref</span> <span class="n">forceResult</span><span class="p">,</span> <span class="k">ref</span> <span class="n">impulsResult</span><span class="p">,</span> <span class="k">ref</span> <span class="n">remainingForce</span><span class="p">,</span> <span class="k">ref</span> <span class="n">remainingImpuls</span><span class="p">,</span> <span class="k">ref</span> <span class="n">usedNormals</span><span class="p">,</span> <span class="k">ref</span> <span class="n">onEdge</span><span class="p">,</span> <span class="k">ref</span> <span class="n">normal</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+
+            <span class="p">}</span>
+
+            <span class="n">impuls</span> <span class="p">=</span> <span class="n">impulsResult</span> <span class="p">+</span> <span class="n">remainingImpuls</span><span class="p">;</span>
+            <span class="n">force</span> <span class="p">+=</span> <span class="n">forceResult</span><span class="p">;</span>
+        <span class="p">}</span>
+</pre></div>
+
+<p>Functions interactWithSomething are also very important, it was quite a hard work to make these functions work plausibly. As you can have already seen, there are still some strange events on the edges, but they appear in a very irregular way.</p>
+
+<p>Let us look at this bunch of crutches!</p>
+
+<div class="highlight highlight-csharp"><pre>    <span class="k">private</span> <span class="k">void</span> <span class="nf">interactWithWood</span><span class="p">(</span><span class="k">ref</span> <span class="n">Vector3</span> <span class="n">force</span><span class="p">,</span> <span class="k">ref</span> <span class="n">Vector3</span> <span class="n">impuls</span><span class="p">,</span> 
+            <span class="k">ref</span> <span class="n">Vector3</span> <span class="n">forceResult</span><span class="p">,</span> <span class="k">ref</span> <span class="n">Vector3</span> <span class="n">impulsResult</span><span class="p">,</span>
+            <span class="k">ref</span> <span class="n">Vector3</span> <span class="n">remainingForce</span><span class="p">,</span> <span class="k">ref</span> <span class="n">Vector3</span> <span class="n">remainingImpuls</span><span class="p">,</span>
+            <span class="k">ref</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Vector3</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">usedNormals</span><span class="p">,</span>
+            <span class="k">ref</span> <span class="kt">bool</span> <span class="n">onEdge</span><span class="p">,</span> <span class="k">ref</span> <span class="n">Vector3</span> <span class="n">normal</span><span class="p">)</span>
+        <span class="p">{</span>
+
+
+                    <span class="kt">float</span> <span class="n">cos</span> <span class="p">=</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Dot</span><span class="p">(</span><span class="n">Vector3</span><span class="p">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">normal</span><span class="p">),</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">force</span><span class="p">));</span> <span class="c1">//We calculate cosine between the normal vector of the </span>
+                                                                                                  <span class="c1">//triangle and the force vector in order to determine </span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">force</span> <span class="p">==</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Zero</span><span class="p">)</span>                                                    <span class="c1">//if we need to apply this force</span>
+                    <span class="p">{</span>
+                        <span class="n">cos</span> <span class="p">=</span> <span class="m">0.0f</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="kt">var</span> <span class="n">currentForceComponent</span> <span class="p">=</span> <span class="p">-</span><span class="n">cos</span> <span class="p">*</span> <span class="n">force</span><span class="p">.</span><span class="n">Length</span><span class="p">()</span> <span class="p">*</span> <span class="n">normal</span><span class="p">;</span>
+
+                    <span class="c1">//Here we make some magic. We have to process situation of seam of two triangles in one plain.</span>
+                    <span class="c1">//If we do not check it, our ball will either fall through the seam or get double acceleration or impuls</span>
+                    <span class="k">if</span> <span class="p">(!</span><span class="n">usedNormals</span><span class="p">.</span><span class="n">ContainsKey</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">cos</span> <span class="p">&lt;=</span> <span class="m">0</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">onEdge</span> <span class="p">||</span> <span class="n">onEdge</span> <span class="p">&amp;&amp;</span> <span class="n">usedNormals</span><span class="p">.</span><span class="n">ContainsKey</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">usedNormals</span><span class="p">[</span><span class="n">normal</span><span class="p">]</span> <span class="p">==</span> <span class="m">1</span> <span class="p">&amp;&amp;</span> <span class="n">cos</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">forceResult</span> <span class="p">+=</span> <span class="n">currentForceComponent</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="c1">//Simultaniously we check if we have to apply this force, so the ball wouldn't be absorbed.</span>
+
+                    <span class="c1">//We impuls is zero, we exit, because we have alreadey applied force (it is a reference variable), and we don't need to reflect zero impuls.</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">impuls</span> <span class="p">==</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Zero</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">return</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">cos</span> <span class="p">=</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Dot</span><span class="p">(</span><span class="n">Vector3</span><span class="p">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">impuls</span><span class="p">),</span> <span class="n">normal</span><span class="p">);</span>
+                    <span class="kt">var</span> <span class="n">currentImpulsComponent</span> <span class="p">=</span> <span class="p">-</span><span class="n">cos</span> <span class="p">*</span> <span class="n">impuls</span><span class="p">.</span><span class="n">Length</span><span class="p">()</span> <span class="p">*</span> <span class="n">normal</span><span class="p">;</span> 
+
+
+                    <span class="n">remainingImpuls</span> <span class="p">=</span> <span class="m">0.999f</span> <span class="p">*</span> <span class="n">remainingImpuls</span><span class="p">;</span> <span class="c1">//It is friction. I was going do make a changeable coefficient, but even with such a small (0.001) measure of frcition the ball slows down drastically.</span>
+
+                    <span class="k">if</span> <span class="p">(!</span><span class="n">usedNormals</span><span class="p">.</span><span class="n">ContainsKey</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">cos</span> <span class="p">&lt;=</span> <span class="m">0</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">onEdge</span> <span class="p">||</span> <span class="n">onEdge</span> <span class="p">&amp;&amp;</span> <span class="n">usedNormals</span><span class="p">.</span><span class="n">ContainsKey</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">usedNormals</span><span class="p">[</span><span class="n">normal</span><span class="p">]</span> <span class="p">==</span> <span class="m">1</span> <span class="p">&amp;&amp;</span> <span class="n">cos</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span><span class="c1">//Here we do the same thing, as we did before with force, with impuls.</span>
+                    <span class="p">{</span>
+                        <span class="n">remainingImpuls</span> <span class="p">+=</span> <span class="n">currentImpulsComponent</span><span class="p">;</span>
+                    <span class="p">}</span>
+
+
+                   <span class="k">if</span> <span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">Abs</span><span class="p">(</span><span class="n">remainingImpuls</span><span class="p">.</span><span class="n">Y</span><span class="p">)</span> <span class="p">&lt;</span> <span class="m">10E-5</span><span class="p">)</span><span class="c1">//It is necessary because the ball starts unprovoked moving due to imperfectness of floating-point operations</span>
+                    <span class="p">{</span>
+                        <span class="n">remainingImpuls</span><span class="p">.</span><span class="n">Y</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+                    <span class="p">}</span>
+
+
+
+                    <span class="k">if</span><span class="p">(!</span><span class="n">usedNormals</span><span class="p">.</span><span class="n">ContainsKey</span><span class="p">(</span><span class="n">normal</span><span class="p">)){</span><span class="c1">//We add used normals to make our magic work.</span>
+                        <span class="n">usedNormals</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="m">1</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">usedNormals</span><span class="p">[</span><span class="n">normal</span><span class="p">]++;</span>
+                    <span class="p">}</span>
+
+
+
+        <span class="p">}</span>
+</pre></div>
+
+<p>So, now you are able to make your impression about ideology of collision processing.</p>
+
+<p>The most interesting class, Gaming, is also derived from class State, so it implements its virtual methods as UpdateAll and draw all.</p>
+
+<p>UpdateAll:</p>
+
+<div class="highlight highlight-csharp"><pre>
+            <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">UpdateAll</span><span class="p">(</span><span class="n">GameTime</span> <span class="n">gameTime</span><span class="p">)</span>
+        <span class="p">{</span>
+
+            <span class="n">enoughTimePassed</span><span class="p">(</span><span class="n">gameTime</span><span class="p">);</span> <span class="c1">//It is necessary to provide acceptable spans between two user's actions, like hitting a button of rotation</span>
+
+            <span class="n">KeyboardState</span> <span class="n">keyState</span> <span class="p">=</span> <span class="n">Keyboard</span><span class="p">.</span><span class="n">GetState</span><span class="p">();</span>
+
+            <span class="n">Vector3</span> <span class="n">force</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">keyState</span><span class="p">.</span><span class="n">IsKeyDown</span><span class="p">(</span><span class="n">Keys</span><span class="p">.</span><span class="n">Escape</span><span class="p">))</span>
+            <span class="p">{</span>
+               <span class="n">parentGame</span><span class="p">.</span><span class="n">setPause</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">keyState</span><span class="p">.</span><span class="n">IsKeyDown</span><span class="p">(</span><span class="n">Keys</span><span class="p">.</span><span class="n">RightControl</span><span class="p">)</span> <span class="p">||</span> <span class="n">keyState</span><span class="p">.</span><span class="n">IsKeyDown</span><span class="p">(</span><span class="n">Keys</span><span class="p">.</span><span class="n">LeftControl</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">rotateCamera</span><span class="p">(</span><span class="n">gameTime</span><span class="p">);</span>
+                <span class="n">setUpVectors</span><span class="p">();</span>
+            <span class="p">}</span>
+
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">keyState</span><span class="p">.</span><span class="n">IsKeyDown</span><span class="p">(</span><span class="n">Keys</span><span class="p">.</span><span class="n">PageUp</span><span class="p">))</span>
+                <span class="n">force</span> <span class="p">+=</span> <span class="n">forceCoef</span> <span class="p">*</span> <span class="k">this</span><span class="p">.</span><span class="n">up</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">keyState</span><span class="p">.</span><span class="n">IsKeyDown</span><span class="p">(</span><span class="n">Keys</span><span class="p">.</span><span class="n">PageDown</span><span class="p">))</span>
+                <span class="n">force</span> <span class="p">-=</span> <span class="n">forceCoef</span> <span class="p">*</span> <span class="k">this</span><span class="p">.</span><span class="n">up</span><span class="p">;</span>
+
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">keyState</span><span class="p">.</span><span class="n">IsKeyDown</span><span class="p">(</span><span class="n">Keys</span><span class="p">.</span><span class="n">Up</span><span class="p">))</span>
+                <span class="n">force</span> <span class="p">+=</span> <span class="n">forceCoef</span> <span class="p">*</span> <span class="k">this</span><span class="p">.</span><span class="n">forward</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">keyState</span><span class="p">.</span><span class="n">IsKeyDown</span><span class="p">(</span><span class="n">Keys</span><span class="p">.</span><span class="n">Down</span><span class="p">))</span>
+                <span class="n">force</span> <span class="p">-=</span> <span class="n">forceCoef</span> <span class="p">*</span> <span class="k">this</span><span class="p">.</span><span class="n">forward</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">keyState</span><span class="p">.</span><span class="n">IsKeyDown</span><span class="p">(</span><span class="n">Keys</span><span class="p">.</span><span class="n">Right</span><span class="p">))</span>
+                <span class="n">force</span> <span class="p">+=</span> <span class="n">forceCoef</span> <span class="p">*</span> <span class="k">this</span><span class="p">.</span><span class="n">right</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">keyState</span><span class="p">.</span><span class="n">IsKeyDown</span><span class="p">(</span><span class="n">Keys</span><span class="p">.</span><span class="n">Left</span><span class="p">))</span>
+                <span class="n">force</span> <span class="p">-=</span> <span class="n">forceCoef</span> <span class="p">*</span> <span class="k">this</span><span class="p">.</span><span class="n">right</span><span class="p">;</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">keyState</span><span class="p">.</span><span class="n">IsKeyDown</span><span class="p">(</span><span class="n">Keys</span><span class="p">.</span><span class="n">End</span><span class="p">)){</span>
+                <span class="n">ball</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">keyState</span><span class="p">.</span><span class="n">IsKeyDown</span><span class="p">(</span><span class="n">Keys</span><span class="p">.</span><span class="n">Home</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">ball</span><span class="p">.</span><span class="n">Reset</span><span class="p">();</span>
+            <span class="p">}</span>
+
+            <span class="n">Vector3</span> <span class="n">gravity</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">gravityAcceleration</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+            <span class="n">Vector3</span> <span class="n">impuls</span> <span class="p">=</span> <span class="n">ball</span><span class="p">.</span><span class="n">velocity</span> <span class="p">*</span> <span class="n">ball</span><span class="p">.</span><span class="n">mass</span><span class="p">;</span>
+            <span class="n">force</span> <span class="p">+=</span>  <span class="n">gravity</span><span class="p">*</span> <span class="n">ball</span><span class="p">.</span><span class="n">mass</span><span class="p">;</span> 
+
+            <span class="n">calculateCollisions</span><span class="p">(</span><span class="k">ref</span> <span class="n">staticTriangles</span><span class="p">,</span> <span class="k">ref</span> <span class="n">ball</span><span class="p">,</span> <span class="k">ref</span> <span class="n">force</span><span class="p">,</span> <span class="k">ref</span> <span class="n">impuls</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">Y</span> <span class="p">&lt;=</span> <span class="n">ball</span><span class="p">.</span><span class="n">minHeight</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">ball</span><span class="p">.</span><span class="n">die</span><span class="p">();</span>
+
+            <span class="p">}</span>
+
+            <span class="n">checkBonusCollisions</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">lives</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">ExitLevel</span><span class="p">();</span>
+            <span class="p">}</span>
+
+            <span class="n">applyAirResistance</span><span class="p">(</span><span class="k">ref</span> <span class="n">force</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(!</span><span class="n">ball</span><span class="p">.</span><span class="n">isDead</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">ball</span><span class="p">.</span><span class="n">applyImpuls</span><span class="p">(</span><span class="n">impuls</span><span class="p">);</span>
+                <span class="n">ball</span><span class="p">.</span><span class="n">applyForce</span><span class="p">(</span><span class="n">force</span><span class="p">,</span> <span class="n">gameTime</span><span class="p">);</span>
+                <span class="n">ball</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">gameTime</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">base</span><span class="p">.</span><span class="n">Update</span><span class="p">(</span><span class="n">gameTime</span><span class="p">);</span>
+        <span class="p">}</span>
+</pre></div>
+
+<p>So, in UpdateAll() (which was designed to replace Update(), which is virtual method of Game class (XNA class)) processes keys and calls methods that update Ball state.</p>
+
+<p>DrawAll:</p>
+
+<div class="highlight highlight-csharp"><pre>            <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">DrawAll</span><span class="p">(</span><span class="n">GameTime</span> <span class="n">gameTime</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">device</span><span class="p">.</span><span class="n">Clear</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">DarkSlateBlue</span><span class="p">);</span>
+
+            <span class="n">RasterizerState</span> <span class="n">rs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">RasterizerState</span><span class="p">();</span>
+            <span class="n">rs</span><span class="p">.</span><span class="n">CullMode</span> <span class="p">=</span> <span class="n">CullMode</span><span class="p">.</span><span class="n">None</span><span class="p">;</span>
+            <span class="n">rs</span><span class="p">.</span><span class="n">FillMode</span> <span class="p">=</span> <span class="n">FillMode</span><span class="p">.</span><span class="n">Solid</span><span class="p">;</span>
+            <span class="n">device</span><span class="p">.</span><span class="n">RasterizerState</span> <span class="p">=</span> <span class="n">rs</span><span class="p">;</span>
+
+            <span class="n">effect</span><span class="p">.</span><span class="n">TextureEnabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+
+            <span class="n">effect</span><span class="p">.</span><span class="n">World</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="n">Identity</span><span class="p">;</span>
+
+            <span class="n">effect</span><span class="p">.</span><span class="n">View</span> <span class="p">=</span> <span class="n">viewMatrix</span><span class="p">;</span>
+            <span class="n">effect</span><span class="p">.</span><span class="n">Projection</span> <span class="p">=</span> <span class="n">projectionMatrix</span><span class="p">;</span>
+
+            <span class="n">effect</span><span class="p">.</span><span class="n">LightingEnabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+            <span class="n">effect</span><span class="p">.</span><span class="n">EnableDefaultLighting</span><span class="p">();</span>
+
+            <span class="n">device</span><span class="p">.</span><span class="n">SetVertexBuffer</span><span class="p">(</span><span class="n">vertexBuffer</span><span class="p">);</span>
+
+            <span class="n">UpdateCamera</span><span class="p">();</span>
+
+
+            <span class="n">DrawBall</span><span class="p">();</span>
+            <span class="n">DrawStaticWorld</span><span class="p">();</span>
+            <span class="n">DrawSky</span><span class="p">();</span>
+
+
+            <span class="n">drawBonuses</span><span class="p">();</span>
+            <span class="n">DrawBallData</span><span class="p">();</span>
+
+            <span class="k">base</span><span class="p">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">gameTime</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+
+<p>As we can see here, DrawAll sets all 3D drawing options and calls methods, which draw corresponding parts of world.</p>
+
+<p>Now let us have a look to a class, which is inherited by most classes in the game:</p>
+
+<div class="highlight highlight-csharp"><pre>    <span class="k">namespace</span> <span class="nn">superProject</span>
+<span class="p">{</span>
+    <span class="k">class</span> <span class="nc">State</span> <span class="p">:</span> <span class="n">Game</span>
+    <span class="p">{</span>
+        <span class="k">protected</span> <span class="kt">int</span> <span class="n">currentButton</span><span class="p">;</span> <span class="c1">//Stores number of selected button, if you press Enter key, corresponing action will happen.</span>
+        <span class="k">protected</span> <span class="n">Color</span> <span class="n">previousButtonColor</span><span class="p">;</span> <span class="c1">//Used for restoring color of the button after setting it to inactive state.</span>
+        <span class="k">protected</span> <span class="n">Game1</span> <span class="n">parentGame</span><span class="p">;</span> <span class="c1">//Gives access to drawing devices, which are able to interact with the window of the game.</span>
+        <span class="k">protected</span> <span class="n">GraphicsDeviceManager</span> <span class="n">graphics</span><span class="p">;</span><span class="c1">//Reference to one of drawing devices</span>
+        <span class="k">protected</span> <span class="n">SpriteBatch</span> <span class="n">spriteBatch</span><span class="p">;</span><span class="c1">//The same</span>
+        <span class="k">protected</span> <span class="n">GraphicsDevice</span> <span class="n">device</span><span class="p">;</span><span class="c1">//The same</span>
+
+        <span class="k">protected</span> <span class="n">SpriteFont</span> <span class="n">font</span><span class="p">;</span> <span class="c1">//Font for printing text on the screen. Fonts in XNA are not scalable.</span>
+
+        <span class="k">protected</span> <span class="n">Button</span><span class="p">[]</span> <span class="n">buttons</span><span class="p">;</span> <span class="c1">//Buttons of menu</span>
+        <span class="k">public</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="p">&gt;</span> <span class="n">data</span><span class="p">;</span><span class="c1">//Some data, that has to be stored for some reasons. Used, for instance, in Cleared class for storing results of the level</span>
+        <span class="k">public</span> <span class="n">MouseState</span> <span class="n">previousMouseState</span><span class="p">;</span> 
+
+        <span class="k">public</span> <span class="n">String</span> <span class="n">name</span><span class="p">;</span> <span class="c1">//Used to store name of current level.</span>
+
+
+        <span class="k">public</span> <span class="k">virtual</span> <span class="k">void</span> <span class="nf">drawRectangle</span><span class="p">(</span><span class="n">Color</span> <span class="n">color</span><span class="p">,</span> <span class="kt">int</span> <span class="n">xSize</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ySize</span><span class="p">,</span> <span class="n">Vector2</span> <span class="n">position</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Texture2D</span> <span class="n">rect</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Texture2D</span><span class="p">(</span><span class="n">graphics</span><span class="p">.</span><span class="n">GraphicsDevice</span><span class="p">,</span> <span class="n">xSize</span><span class="p">,</span> <span class="n">ySize</span><span class="p">);</span>
+
+            <span class="n">Color</span><span class="p">[]</span> <span class="n">data</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Color</span><span class="p">[</span><span class="n">xSize</span> <span class="p">*</span> <span class="n">ySize</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">data</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">color</span><span class="p">;</span>
+            <span class="p">}</span>
+                <span class="n">rect</span><span class="p">.</span><span class="n">SetData</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+             <span class="n">spriteBatch</span><span class="p">.</span><span class="n">Begin</span><span class="p">();</span>
+                <span class="n">spriteBatch</span><span class="p">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">);</span>
+             <span class="n">spriteBatch</span><span class="p">.</span><span class="n">End</span><span class="p">();</span>
+
+        <span class="p">}</span>
+
+        <span class="k">protected</span> <span class="k">void</span> <span class="nf">switchButtons</span><span class="p">(</span><span class="kt">int</span> <span class="n">d</span><span class="p">)</span> <span class="c1">//Used to swithc buttons. We pass them one-after-another in order of adding them to ButtonsList.</span>
+        <span class="p">{</span>
+            <span class="n">buttons</span><span class="p">[</span><span class="n">currentButton</span><span class="p">].</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="n">previousButtonColor</span><span class="p">;</span>
+            <span class="n">currentButton</span> <span class="p">=</span> <span class="p">(</span><span class="n">currentButton</span> <span class="p">+</span> <span class="n">d</span> <span class="p">+</span> <span class="n">buttons</span><span class="p">.</span><span class="n">Length</span><span class="p">)</span> <span class="p">%</span> <span class="n">buttons</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+
+            <span class="n">previousButtonColor</span> <span class="p">=</span> <span class="n">buttons</span><span class="p">[</span><span class="n">currentButton</span><span class="p">].</span><span class="n">backgroundColor</span><span class="p">;</span>
+            <span class="n">buttons</span><span class="p">[</span><span class="n">currentButton</span><span class="p">].</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="n">Color</span><span class="p">.</span><span class="n">Green</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">float</span> <span class="n">timeSpan</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+
+        <span class="k">protected</span> <span class="kt">bool</span> <span class="nf">enoughTimePassed</span><span class="p">(</span><span class="n">GameTime</span> <span class="n">gameTime</span><span class="p">)</span><span class="c1">//It is a fucntion, which allows us to maintain proper time span between player's actions.</span>
+        <span class="p">{</span>
+            <span class="n">timeSpan</span> <span class="p">+=</span> <span class="n">gameTime</span><span class="p">.</span><span class="n">ElapsedGameTime</span><span class="p">.</span><span class="n">Milliseconds</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">timeSpan</span> <span class="p">&lt;</span> <span class="m">200f</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">timeSpan</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">virtual</span> <span class="k">void</span> <span class="nf">writeMessage</span><span class="p">(</span><span class="n">String</span> <span class="n">message</span><span class="p">,</span> <span class="n">Vector2</span> <span class="k">where</span><span class="p">,</span> <span class="n">Color</span> <span class="n">color</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">spriteBatch</span><span class="p">.</span><span class="n">Begin</span><span class="p">();</span>
+                <span class="n">spriteBatch</span><span class="p">.</span><span class="n">DrawString</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="k">where</span><span class="p">,</span> <span class="n">color</span><span class="p">);</span>
+               <span class="n">spriteBatch</span><span class="p">.</span><span class="n">End</span><span class="p">();</span>
+                <span class="n">device</span><span class="p">.</span><span class="n">BlendState</span> <span class="p">=</span> <span class="n">BlendState</span><span class="p">.</span><span class="n">Opaque</span><span class="p">;</span>
+                <span class="n">device</span><span class="p">.</span><span class="n">DepthStencilState</span> <span class="p">=</span> <span class="n">DepthStencilState</span><span class="p">.</span><span class="n">Default</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">public</span> <span class="k">virtual</span> <span class="k">void</span> <span class="nf">DrawAll</span><span class="p">(</span><span class="n">GameTime</span> <span class="n">gameTime</span><span class="p">)</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+        <span class="k">public</span> <span class="k">virtual</span> <span class="k">void</span> <span class="nf">UpdateAll</span><span class="p">(</span><span class="n">GameTime</span> <span class="n">gameTime</span><span class="p">)</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>The other interesting place in code is Ball class:</p>
+
+<div class="highlight highlight-csharp"><pre>       <span class="k">class</span> <span class="nc">Ball</span>
+    <span class="p">{</span>
+        <span class="k">protected</span> <span class="n">Gaming</span> <span class="n">parentGaming</span><span class="p">;</span> <span class="c1">//Used to report the game, that it should change the state.</span>
+        <span class="k">public</span> <span class="n">Model</span> <span class="n">model</span><span class="p">;</span>
+        <span class="k">public</span> <span class="n">Quaternion</span> <span class="n">rotationQuaternion</span><span class="p">;</span>
+        <span class="k">public</span> <span class="n">Vector3</span> <span class="n">position</span><span class="p">;</span>
+        <span class="k">public</span> <span class="n">Vector3</span> <span class="n">velocity</span><span class="p">;</span>
+        <span class="k">public</span> <span class="kt">float</span> <span class="n">mass</span><span class="p">;</span>
+        <span class="k">public</span> <span class="n">BoundingSphere</span> <span class="n">boundingSphere</span><span class="p">;</span>
+        <span class="k">public</span> <span class="n">Vector3</span> <span class="n">Home</span><span class="p">;</span>
+        <span class="k">public</span> <span class="n">Vector3</span> <span class="n">rotation</span><span class="p">;</span>
+        <span class="k">public</span> <span class="kt">float</span> <span class="n">angle</span><span class="p">;</span>
+        <span class="k">public</span> <span class="kt">float</span> <span class="n">radius</span> <span class="p">=</span> <span class="m">1.0f</span><span class="p">;</span> <span class="c1">//radius of the bounding sphere.</span>
+
+
+        <span class="k">public</span> <span class="k">enum</span> <span class="n">Material</span> <span class="p">{</span><span class="n">Marble</span><span class="p">,</span> <span class="n">Plastic</span><span class="p">,</span> <span class="n">Stone</span><span class="p">,</span> <span class="n">Idle</span><span class="p">};</span><span class="c1">//Materials, which are available for ball. Idle is used only in switches to create nice default branches.</span>
+        <span class="k">public</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Material</span><span class="p">,</span> <span class="n">Texture2D</span><span class="p">&gt;</span> <span class="n">textures</span><span class="p">;</span>
+        <span class="k">public</span> <span class="n">Material</span> <span class="n">currentMaterial</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">maxVelocity</span> <span class="p">=</span> <span class="m">60.0f</span><span class="p">;</span>
+
+
+       <span class="k">public</span> <span class="kt">int</span> <span class="n">lives</span><span class="p">;</span>
+       <span class="k">public</span> <span class="kt">int</span> <span class="n">score</span><span class="p">;</span>
+
+       <span class="k">public</span> <span class="kt">int</span> <span class="n">keysLeft</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+        <span class="k">public</span> <span class="kt">bool</span> <span class="n">justDied</span><span class="p">;</span>
+        <span class="k">public</span> <span class="kt">float</span> <span class="n">minHeight</span><span class="p">;</span> <span class="c1">//After getting lower minHeight, ball dies</span>
+
+
+        <span class="k">public</span> <span class="nf">Ball</span><span class="p">(</span><span class="n">Model</span> <span class="n">model</span><span class="p">,</span> <span class="n">Gaming</span> <span class="n">parentGaming</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">parentGaming</span> <span class="p">=</span> <span class="n">parentGaming</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">model</span> <span class="p">=</span> <span class="n">model</span><span class="p">;</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="n">boundingSphere</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BoundingSphere</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">position</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">radius</span><span class="p">);</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="n">rotationQuaternion</span> <span class="p">=</span> <span class="n">Quaternion</span><span class="p">.</span><span class="n">Identity</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">velocity</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">textures</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Material</span><span class="p">,</span><span class="n">Texture2D</span><span class="p">&gt;();</span>
+
+            <span class="n">setMaterial</span><span class="p">(</span><span class="n">Material</span><span class="p">.</span><span class="n">Marble</span><span class="p">);</span>
+
+
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">setData</span><span class="p">(</span><span class="kt">int</span> <span class="n">lives</span><span class="p">,</span> <span class="kt">int</span> <span class="n">score</span><span class="p">,</span> <span class="kt">float</span> <span class="n">minHeight</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">lives</span> <span class="p">=</span> <span class="n">lives</span><span class="p">;</span> 
+            <span class="k">this</span><span class="p">.</span><span class="n">score</span> <span class="p">=</span> <span class="n">score</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">minHeight</span> <span class="p">=</span> <span class="n">minHeight</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">setPosition</span><span class="p">(</span><span class="n">Vector3</span> <span class="n">position</span><span class="p">){</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">Home</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="n">position</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">bool</span> <span class="nf">applyBonus</span><span class="p">(</span><span class="n">Bonus</span><span class="p">.</span><span class="n">BonusType</span> <span class="n">type</span><span class="p">,</span> <span class="n">Vector3</span> <span class="n">bonusPosition</span><span class="p">)</span>
+        <span class="p">{</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="p">==</span> <span class="n">Bonus</span><span class="p">.</span><span class="n">BonusType</span><span class="p">.</span><span class="n">End</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">keysLeft</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">parentGaming</span><span class="p">.</span><span class="n">levelCleared</span><span class="p">();</span>
+
+            <span class="p">}</span>
+
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="p">==</span> <span class="n">Bonus</span><span class="p">.</span><span class="n">BonusType</span><span class="p">.</span><span class="n">Key</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="n">keysLeft</span><span class="p">--;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="p">==</span> <span class="n">Bonus</span><span class="p">.</span><span class="n">BonusType</span><span class="p">.</span><span class="n">Live</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="n">lives</span><span class="p">++;</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="p">==</span> <span class="n">Bonus</span><span class="p">.</span><span class="n">BonusType</span><span class="p">.</span><span class="n">Score</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="n">score</span> <span class="p">+=</span> <span class="m">1000</span><span class="p">;</span>
+            <span class="p">}</span>
+
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="p">==</span> <span class="n">Bonus</span><span class="p">.</span><span class="n">BonusType</span><span class="p">.</span><span class="n">Save</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="n">Home</span> <span class="p">=</span> <span class="n">bonusPosition</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">setMaterial</span><span class="p">(</span><span class="n">Material</span> <span class="n">material</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">currentMaterial</span> <span class="p">=</span> <span class="n">material</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">material</span> <span class="p">==</span> <span class="n">Material</span><span class="p">.</span><span class="n">Marble</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="n">mass</span> <span class="p">=</span> <span class="m">1f</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">material</span> <span class="p">==</span> <span class="n">Material</span><span class="p">.</span><span class="n">Plastic</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="n">mass</span> <span class="p">=</span> <span class="m">0.5f</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">material</span> <span class="p">==</span> <span class="n">Material</span><span class="p">.</span><span class="n">Stone</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="n">mass</span> <span class="p">=</span> <span class="m">5.0f</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">applyForce</span><span class="p">(</span><span class="n">Vector3</span> <span class="n">force</span><span class="p">,</span> <span class="n">GameTime</span> <span class="n">time</span><span class="p">)</span>
+        <span class="p">{</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">currentMaterial</span> <span class="p">==</span> <span class="n">Ball</span><span class="p">.</span><span class="n">Material</span><span class="p">.</span><span class="n">Marble</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">force</span><span class="p">.</span><span class="n">Y</span> <span class="p">=</span> <span class="n">Math</span><span class="p">.</span><span class="n">Min</span><span class="p">(</span><span class="m">2.5f</span><span class="p">,</span> <span class="n">force</span><span class="p">.</span><span class="n">Y</span><span class="p">);</span> <span class="c1">//Limitations for Marble ball. It shouldn't fly in a usual way.</span>
+            <span class="p">}</span>
+            <span class="kt">var</span> <span class="n">previousVelocity</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">velocity</span><span class="p">;</span>
+            <span class="kt">var</span> <span class="n">timePassed</span> <span class="p">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">time</span><span class="p">.</span><span class="n">ElapsedGameTime</span><span class="p">.</span><span class="n">TotalSeconds</span><span class="p">;</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="n">velocity</span> <span class="p">+=</span> <span class="n">force</span> <span class="p">/</span> <span class="n">mass</span> <span class="p">*</span> <span class="n">timePassed</span><span class="p">;</span>
+
+
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">currentMaterial</span> <span class="p">==</span> <span class="n">Ball</span><span class="p">.</span><span class="n">Material</span><span class="p">.</span><span class="n">Marble</span> <span class="p">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="n">velocity</span><span class="p">.</span><span class="n">Y</span> <span class="p">&gt;</span> <span class="m">0.5f</span> <span class="p">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="n">velocity</span><span class="p">.</span><span class="n">Y</span> <span class="p">-</span> <span class="n">previousVelocity</span><span class="p">.</span><span class="n">Y</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="n">velocity</span><span class="p">.</span><span class="n">Y</span> <span class="p">=</span> <span class="n">previousVelocity</span><span class="p">.</span><span class="n">Y</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">velocity</span><span class="p">.</span><span class="n">Length</span><span class="p">()</span> <span class="p">&gt;</span> <span class="n">maxVelocity</span> <span class="p">)</span> <span class="c1">//Limitation for max velocity.</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="n">velocity</span> <span class="p">=</span> <span class="n">previousVelocity</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">applyImpuls</span><span class="p">(</span><span class="n">Vector3</span> <span class="n">impuls</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">velocity</span> <span class="p">=</span> <span class="n">impuls</span> <span class="p">/</span> <span class="k">this</span><span class="p">.</span><span class="n">mass</span><span class="p">;</span> <span class="c1">//Applying impuls back after interacting with world elements.</span>
+        <span class="p">}</span>
+
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Reset</span><span class="p">()</span><span class="c1">//Is called after death or pressing Home key.</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Home</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span> 
+            <span class="k">this</span><span class="p">.</span><span class="n">boundingSphere</span><span class="p">.</span><span class="n">Center</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">position</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">update</span><span class="p">(</span><span class="n">GameTime</span> <span class="n">time</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">position</span> <span class="p">+=</span> <span class="k">this</span><span class="p">.</span><span class="n">velocity</span> <span class="p">*</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">time</span><span class="p">.</span><span class="n">ElapsedGameTime</span><span class="p">.</span><span class="n">TotalSeconds</span><span class="p">;</span> 
+            <span class="k">this</span><span class="p">.</span><span class="n">boundingSphere</span><span class="p">.</span><span class="n">Center</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">position</span><span class="p">;</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="n">rotation</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">velocity</span> <span class="p">*</span> <span class="n">MathHelper</span><span class="p">.</span><span class="n">ToRadians</span><span class="p">(-</span><span class="m">1.5f</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">angle</span> <span class="p">+=</span> <span class="k">this</span><span class="p">.</span><span class="n">velocity</span><span class="p">.</span><span class="n">Length</span><span class="p">()</span> <span class="p">/(-</span><span class="m">100.0f</span> <span class="p">/</span> <span class="k">this</span><span class="p">.</span><span class="n">radius</span><span class="p">);</span>
+            <span class="n">Vector3</span> <span class="n">axis</span> <span class="p">=</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Cross</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">velocity</span><span class="p">,</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Up</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">axis</span> <span class="p">!=</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Zero</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">axis</span><span class="p">.</span><span class="n">Normalize</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="n">rotationQuaternion</span> <span class="p">=</span> <span class="n">Quaternion</span><span class="p">.</span><span class="n">CreateFromAxisAngle</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">angle</span><span class="p">);</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="n">score</span> <span class="p">-=</span> <span class="m">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">Y</span> <span class="p">&lt;</span> <span class="n">minHeight</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="n">die</span><span class="p">();</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">die</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">Reset</span><span class="p">();</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">justDied</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">lives</span><span class="p">--;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">bool</span> <span class="nf">isDead</span><span class="p">()</span> <span class="c1">//Prevents parentGaming from updating ball, which has just died. It is necessary, because influences and deaths are calculated simultaneously, </span>
+            <span class="c1">//so we could unintentionally apply impuls (which was reflected or something like this) to a dead ball.</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">justDied</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="n">justDied</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">stop</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">velocity</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="user-content-sources" class="anchor" href="#sources"><span class="octicon octicon-link"></span></a>Sources</h2>
+
+<p>Working on this project I used:</p>
+
+<ul>
+<li>Riemer's XNA tutorial: <a href="http://www.riemers.net/">http://www.riemers.net/</a>
+</li>
+<li>Stackoverflow and other thematical forums</li>
+<li>Official Microsoft documentation: <a href="http://msdn.microsoft.com/en-us/library">http://msdn.microsoft.com/en-us/library</a>
+</li>
+<li>C# 5.0 in a Nutshell by Joseph Albahari</li>
+</ul></article>
+  </div>
+
+  </div>
+</div>
+</body>
+</html>
