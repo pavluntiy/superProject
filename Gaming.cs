@@ -974,7 +974,7 @@ namespace superProject
         public override void UpdateAll(GameTime gameTime)
         {
  
-            enoughTimePassed(gameTime);
+            enoughTimePassed(gameTime); //It is necessary to provide acceptable spans between two user's actions, like hitting a button of rotation
 
             KeyboardState keyState = Keyboard.GetState();
 

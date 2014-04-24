@@ -126,7 +126,7 @@ Important note. Yes, classes Game1 and Program were initially pre-generated duri
 Let us look up to several functions.
 
 <div style = "font-family: courier">calculateCollisions</div> can be calles one of the most important functions of the class Gaming:
-````
+````csharp
 	        private void calculateCollisions(ref WorldTriangle[] triangles, ref Ball ball, ref Vector3 force, ref Vector3 impuls){
 
             Dictionary<Vector3, int> usedNormals = new Dictionary<Vector3, int>(); 
@@ -181,7 +181,7 @@ Functions interactWithSomething are also very important, it was quite a hard wor
 
 Let us look at this bunch of crutches!
 
-````
+````csharp
 	private void interactWithWood(ref Vector3 force, ref Vector3 impuls, 
             ref Vector3 forceResult, ref Vector3 impulsResult,
             ref Vector3 remainingForce, ref Vector3 remainingImpuls,
@@ -244,6 +244,125 @@ Let us look at this bunch of crutches!
 
 So, now you are able to make your impression about ideology of collision processing.
 
+The most interesting class, Gaming, is also derived from class State, so it implements its virtual methods as UpdateAll and draw all.
+
+UpdateAll:
+
+````csharp
+
+	        public override void UpdateAll(GameTime gameTime)
+        {
+ 
+            enoughTimePassed(gameTime); //It is necessary to provide acceptable spans between two user's actions, like hitting a button of rotation
+
+            KeyboardState keyState = Keyboard.GetState();
+
+            Vector3 force = new Vector3(0, 0, 0);
+
+            if(keyState.IsKeyDown(Keys.Escape))
+            {
+               parentGame.setPause();
+            }
+            if (keyState.IsKeyDown(Keys.RightControl) || keyState.IsKeyDown(Keys.LeftControl))
+            {
+                rotateCamera(gameTime);
+                setUpVectors();
+            }
+           
+
+            if (keyState.IsKeyDown(Keys.PageUp))
+                force += forceCoef * this.up;
+            if (keyState.IsKeyDown(Keys.PageDown))
+                force -= forceCoef * this.up;
+
+            
+            if (keyState.IsKeyDown(Keys.Up))
+                force += forceCoef * this.forward;
+            if (keyState.IsKeyDown(Keys.Down))
+                force -= forceCoef * this.forward;
+
+            if (keyState.IsKeyDown(Keys.Right))
+                force += forceCoef * this.right;
+            if (keyState.IsKeyDown(Keys.Left))
+                force -= forceCoef * this.right;
+
+            if(keyState.IsKeyDown(Keys.End)){
+                ball.stop();
+            }
+
+            if (keyState.IsKeyDown(Keys.Home))
+            {
+                ball.Reset();
+            }
+
+            Vector3 gravity = new Vector3(0, gravityAcceleration, 0);
+            Vector3 impuls = ball.velocity * ball.mass;
+            force +=  gravity* ball.mass; 
+            
+            calculateCollisions(ref staticTriangles, ref ball, ref force, ref impuls);
+
+            if (ball.position.Y <= ball.minHeight)
+            {
+                ball.die();
+                
+            }
+
+            checkBonusCollisions();
+            if (ball.lives <= 0)
+            {
+                ExitLevel();
+            }
+
+            applyAirResistance(ref force);
+            if (!ball.isDead())
+            {
+                ball.applyImpuls(impuls);
+                ball.applyForce(force, gameTime);
+                ball.update(gameTime);
+            }
+            base.Update(gameTime);
+        }
+````
+
+DrawAll:
+
+````csharp
+	        public override void DrawAll(GameTime gameTime)
+        {
+            device.Clear(Color.DarkSlateBlue);
+
+            RasterizerState rs = new RasterizerState();
+            rs.CullMode = CullMode.None;
+            rs.FillMode = FillMode.Solid;
+            device.RasterizerState = rs;
+
+            effect.TextureEnabled = true;
+
+            effect.World = Matrix.Identity;
+            
+            effect.View = viewMatrix;
+            effect.Projection = projectionMatrix;
+
+            effect.LightingEnabled = true;
+            effect.EnableDefaultLighting();
+
+            device.SetVertexBuffer(vertexBuffer);
+            
+            UpdateCamera();
+
+            
+            DrawBall();
+            DrawStaticWorld();
+            DrawSky();
+            
+            
+            drawBonuses();
+            DrawBallData();
+            
+            base.Draw(gameTime);
+        }
+    }
+````
 	
 
 ##Sources
