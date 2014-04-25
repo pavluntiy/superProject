@@ -27,6 +27,8 @@ I also have to confess that conception of encapsulation was deeply offended duri
 
 ##User's guide
 
+Attetntion! You need .NET framework installed 
+
 ###Rules
 You are able to control a ball by applying forces to it in all three dimensions, so that it would get proper acceleration and, consequently, velocity.
 
